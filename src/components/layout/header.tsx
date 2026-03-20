@@ -1,144 +1,71 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Button } from '../ui/button';
-import { PanelLeftIcon, Bell, Moon, Sun } from 'lucide-react';
-import { Separator } from '../ui/separator';
-import { Avatar, AvatarFallback } from '../ui/avatar';
-import { useSidebarStore } from '@/store/layoutStore';
-import { useThemeStore } from '@/store/layoutStore';
-import { cn } from '@/lib/utils';
-import { getEncryptedItem } from '@/utils/encryption';
-import { NotificationsDropdown } from './NotificationsDropdown';
+import React from 'react';
+import { Bell, LogOut, Menu, Moon, ShieldCheck, Sun } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { useSidebarStore, useThemeStore } from '@/store/layoutStore';
+import { appIdentity, workerProfile } from '@/data/gigshield-data';
 
 type HeaderProps = {
-    title?: string;
-    subtitle?: string;
-    username?: string;
-    desc?: string;
-    avatar?: string;
-    HeaderComp?: React.ReactNode;
+  title?: string;
+  subtitle?: string;
+  HeaderComp?: React.ReactNode;
 };
 
 const Header: React.FC<HeaderProps> = ({
-    title = 'Dashboard',
-    subtitle = 'Learner Portal',
-    username = 'User Name',
-    desc = 'NSQF Level 4',
-    avatar = 'U',
-    HeaderComp,
+  title = 'GigShield AI',
+  subtitle = 'Weekly income protection for food delivery partners',
+  HeaderComp,
 }) => {
-    const { isOpen, toggleSidebar } = useSidebarStore();
-    const { isDark, toggleTheme } = useThemeStore();
+  const router = useRouter();
+  const { toggleSidebar } = useSidebarStore();
+  const { isDark, toggleTheme } = useThemeStore();
 
-    const [sessionData, setSessionData] = useState<any>(null);
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push('/');
+  };
 
-    // ✅ Load session from localStorage
-    useEffect(() => {
-        const savedSession = localStorage.getItem("credxUser");
-        if (savedSession) {
-            setSessionData(JSON.parse(savedSession));
-        } else {
-            // router.push("/");
-        }
-    }, []);
+  return (
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
+      <div className="flex h-16 items-center justify-between gap-4 px-4 md:px-6">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" onClick={toggleSidebar} className="md:hidden">
+            <Menu className="h-5 w-5" />
+          </Button>
+          <div className="hidden h-10 w-10 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-600 md:flex dark:text-sky-300">
+            <ShieldCheck className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-lg font-semibold text-foreground">{title}</p>
+            <p className="text-xs text-muted-foreground">{subtitle}</p>
+          </div>
+        </div>
 
-    const sections =
-        sessionData?.role?.toLowerCase();
-
-    const getUserInitials = (name: string) => {
-        return name
-            .split(' ')
-            .map(n => n[0])
-            .join('')
-            .toUpperCase()
-            .slice(0, 2);
-    };
-
-    const [role, setRole] = useState<string>("student");
-
-    useEffect(() => {
-        const decryptedRole = getEncryptedItem("role") || "student";
-
-        const r = decryptedRole.toLowerCase();
-        setRole(r);
-    }, []);
-
-    const formatRole = (r?: string) =>
-        (r || "student")
-            .toLowerCase()
-            .replace(/_/g, " ")
-            .replace(/\b\w/g, (c) => c.toUpperCase());
-
-    const displayName = sessionData?.username || formatRole(role);
-    const displayRole = formatRole(sessionData?.role || role);
-    const displayEmail = sessionData?.email || "";
-
-    return (
-        <header className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
-            <div className="container flex h-16 items-center justify-between px-4">
-                {/* Left Section */}
-                <div className="flex items-center gap-3">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={toggleSidebar}
-                        aria-label="Toggle sidebar"
-                        className="cursor-pointer"
-                    >
-                        <PanelLeftIcon className="h-10 w-10" />
-                    </Button>
-
-                    <div>
-                        <span className="text-xl font-bold text-primary">{title}</span>
-                        <div className="text-xs text-muted-foreground">{subtitle}</div>
-                    </div>
-                </div>
-
-                {/* Right Section */}
-                <div className="flex items-center gap-4">
-                    <NotificationsDropdown />
-
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={toggleTheme}
-                        className="h-9 w-9 p-0 cursor-pointer"
-                        aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-                    >
-                        {isDark ? (
-                            <Sun className="h-4 w-4 transition-all" />
-                        ) : (
-                            <Moon className="h-4 w-4 transition-all" />
-                        )}
-                    </Button>
-
-                    {HeaderComp}
-
-                    <Separator orientation="vertical" className="h-8" />
-
-                    <div className="flex items-center gap-3">
-                        <div className="hidden text-right sm:block">
-                            <div className="text-sm font-semibold">{displayName}</div>
-                            <div className="text-xs text-muted-foreground">
-                                {displayRole}{displayEmail ? ` • ${displayEmail}` : ''}
-                            </div>
-                        </div>
-                        <Avatar className="h-11 w-11 border-2 border-sidebar-border shadow-sm">
-                            <AvatarFallback className={cn(
-                                "text-sm font-bold text-white",
-                                sessionData?.role === "recruiter"
-                                    ? "bg-gradient-to-br from-purple-600 to-pink-600"
-                                    : "bg-gradient-to-br from-primary to-accent"
-                            )}>
-                                {displayName ? getUserInitials(displayName) : role.charAt(0).toUpperCase()}
-                            </AvatarFallback>
-                        </Avatar>
-                    </div>
-                </div>
-            </div>
-        </header>
-    );
+        <div className="flex items-center gap-2 md:gap-3">
+          {HeaderComp}
+          <Button variant="outline" size="sm" className="hidden gap-2 md:flex">
+            <Bell className="h-4 w-4" />
+            Live alerts
+          </Button>
+          <Button variant="outline" size="icon" onClick={toggleTheme}>
+            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
+          <div className="hidden rounded-2xl border border-border/70 bg-card px-3 py-2 md:block">
+            <p className="text-sm font-semibold text-foreground">{workerProfile.name}</p>
+            <p className="text-xs text-muted-foreground">
+              {workerProfile.role} • {appIdentity.name}
+            </p>
+          </div>
+          <Button variant="ghost" size="sm" className="gap-2" onClick={handleLogout}>
+            <LogOut className="h-4 w-4" />
+            <span className="hidden md:inline">Logout</span>
+          </Button>
+        </div>
+      </div>
+    </header>
+  );
 };
 
 export default Header;

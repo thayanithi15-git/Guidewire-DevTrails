@@ -1,21 +1,14 @@
 import {
-  LayoutDashboard,
-  Users,
-  FolderKanban,
-  ClipboardList,
-  FileText,
-  BarChart3,
   Activity,
-  MessageSquare,
-  Award,
-  Target,
-  Star,
-  Settings,
+  BadgeIndianRupee,
+  FileText,
+  LayoutDashboard,
+  Radar,
+  ShieldAlert,
   ShieldCheck,
-  Trophy,
-Briefcase,
-User,
-ClipboardCheck,
+  Siren,
+  SlidersHorizontal,
+  User,
 } from "lucide-react";
 
 export interface SidebarItem {
@@ -30,222 +23,74 @@ export interface SidebarSection {
   items: SidebarItem[];
 }
 
-/* ===================== ADMIN (7 â†’ 3 + 4) ===================== */
-
-export const adminSections = (base: string): SidebarSection[] => [
-
-  /* ----- 3 ITEMS ----- */
+const singleRoleSections = (base: string): SidebarSection[] => [
   {
-    title: "Core",
+    title: "Worker Hub",
     items: [
       {
         icon: LayoutDashboard,
-        label: "Analytics Dashboard",
+        label: "Dashboard",
         href: `${base}`,
-        description: "Admin overview",
+        description: "Income protection overview",
       },
       {
-        icon: Users,
-        label: "User Management",
-        href: `${base}/user-manage`,
-        description: "Manage users",
+        icon: User,
+        label: "My Profile",
+        href: `${base}/profile`,
+        description: "Delivery partner profile",
       },
       {
-        icon: Users,
-        label: "Students",
-        href: `${base}/students-manage`,
-        description: "Manage students",
+        icon: ShieldCheck,
+        label: "My Policy",
+        href: `${base}/projects`,
+        description: "Weekly coverage details",
       },
       {
-        icon: Users,
-        label: "Mentors",
-        href: `${base}/mentor-manage`,
-        description: "Manage mentors",
+        icon: Radar,
+        label: "Risk & Premium",
+        href: `${base}/tasks`,
+        description: "AI risk and weekly pricing",
+      },
+      {
+        icon: Siren,
+        label: "Live Triggers",
+        href: `${base}/internships`,
+        description: "Parametric disruption engine",
+      },
+      {
+        icon: FileText,
+        label: "Claims",
+        href: `${base}/surveys`,
+        description: "Automated claim flow",
+      },
+      {
+        icon: BadgeIndianRupee,
+        label: "Payouts",
+        href: `${base}/certifications`,
+        description: "Recovered earnings and transfers",
+      },
+      {
+        icon: ShieldAlert,
+        label: "Fraud Monitor",
+        href: `${base}/rankings`,
+        description: "Anomaly detection and reviews",
       },
       {
         icon: Activity,
-        label: "System Logs",
-        href: `${base}/system-logs`,
-        description: "Audit trail",
-      },
-    ],
-  },
-
-  /* ----- 4 ITEMS ----- */
-  {
-    title: "Administration",
-    items: [
-      // {
-      //   icon: FolderKanban,
-      //   label: "Mappings",
-      //   href: `${base}/mappings`,
-      //   description: "Mentor-student map",
-      // },
-      {
-        icon: FileText,
-        label: "Project Details",
-        href: `${base}/projects`,
-        description: "All projects",
+        label: "Analytics",
+        href: `${base}/notifications`,
+        description: "Portfolio, weather and loss insights",
       },
       {
-        icon: Award,
-        label: "Certifications",
-        href: `${base}/certifications`,
-        description: "All Certifications",
-      },
-      {
-        icon: ClipboardList,
-        label: "Tasks",
-        href: `${base}/tasks`,
-        description: "All Tasks",
-      },
-      {
-        icon: BarChart3,
-        label: "Reporting",
-        href: `${base}/reports`,
-        description: "Charts & insights",
+        icon: SlidersHorizontal,
+        label: "Settings",
+        href: `${base}/settings`,
+        description: "Theme, language and payment setup",
       },
     ],
   },
 ];
 
-/* ===================== MENTOR (4 â†’ 2 + 2) ===================== */
-
-export const mentorSections = (base: string): SidebarSection[] => [
-
-  /* ----- 2 ITEMS ----- */
-  {
-    title: "Mentor Space",
-    items: [
-      {
-        icon: LayoutDashboard,
-        label: "Dashboard",
-        href: `${base}`,
-        description: "Mentor dashboard",
-      },
-      {
-        icon: Users,
-        label: "Management",
-        href: `${base}/assigned-students`,
-        description: "My students",
-      },
-      {
-        icon: FolderKanban,
-        label: "Projects",
-        href: `${base}/projects`,
-        description: "Student projects",
-      },
-      {
-        icon: ClipboardList,
-        label: "Tasks",
-        href: `${base}/tasks`,
-        description: "Student tasks",
-      },
-      {
-        icon: Award,
-        label: "Certifications",
-        href: `${base}/certifications`,
-        description: "Student certifications",
-      },
-      {
-        icon: Briefcase,
-        label: "Internships",
-        href: `${base}/internships`,
-        description: "Student internships",
-      },
-    ],
-  },
-
-  /* ----- 2 ITEMS ----- */
-  {
-    title: "Review",
-    items: [
-      {
-        icon: ShieldCheck,
-        label: "Approvals & Feedback",
-        href: `${base}/approvals`,
-        description: "Verify works",
-      },
-      {
-        icon: MessageSquare,
-        label: "Surveys",
-        href: `${base}/surveys`,
-        description: "Survey module",
-      },
-    ],
-  },
-];
-
-/* ===================== STUDENT (5 â†’ 2 + 3) ===================== */
-
-export const studentSections = (base: string): SidebarSection[] => [
-
-  /* ----- DASHBOARD ----- */
-  {
-    title: "Overview",
-    items: [
-      {
-        icon: LayoutDashboard,
-        label: "Dashboard",
-        href: `${base}`,
-        description: "Student overview",
-      },
-      {
-        icon: Trophy,
-        label: "Rankings",
-        href: `${base}/rankings`,
-        description: "My position",
-      },
-    ],
-  },
-
-  /* ----- WORK ----- */
-  {
-    title: "Work & Progress",
-    items: [
-      {
-        icon: FileText,
-        label: "Projects",
-        href: `${base}/projects`,
-        description: "Manage projects",
-      },
-      {
-        icon: ClipboardList,
-        label: "Tasks",
-        href: `${base}/tasks`,
-        description: "Assigned tasks",
-      },
-      {
-        icon: Briefcase,
-        label: "Internships",
-        href: `${base}/internships`,
-        description: "Internship records",
-      },
-      {
-        icon: Award,
-        label: "Certifications",
-        href: `${base}/certifications`,
-        description: "My certificates",
-      },
-    ],
-  },
-
-  /* ----- PERSONAL ----- */
-  {
-    title: "Personal",
-    items: [
-      {
-        icon: User,
-        label: "Profile",
-        href: `${base}/profile`,
-        description: "Student profile",
-      },
-      {
-        icon: ClipboardCheck,
-        label: "Surveys",
-        href: `${base}/surveys`,
-        description: "Answer surveys",
-      },
-    ],
-  },
-];
+export const adminSections = (base: string): SidebarSection[] => singleRoleSections(base.replace("/admin/dashboard", "/student/dashboard"));
+export const mentorSections = (base: string): SidebarSection[] => singleRoleSections(base.replace("/mentor/dashboard", "/student/dashboard"));
+export const studentSections = (base: string): SidebarSection[] => singleRoleSections(base);

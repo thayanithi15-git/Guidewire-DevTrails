@@ -26,8 +26,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Progress IQ",
-  description: "Progress IQ - Smart Activity Reporting Dashboard",
+  title: "GigShield AI",
+  description: "AI-powered weekly income protection platform for food delivery partners.",
   icons: {
     icon: "/progress_iq.png",
     shortcut: "/progress_iq.png",
