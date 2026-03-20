@@ -30,12 +30,40 @@
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/app/layout.tsx",
+    "src/app/page.tsx",
+    "src/app/(public)/**/*.tsx",
+    "src/app/(private)/student/**/*.tsx",
+    "src/components/gigshield-pages.tsx",
+    "src/components/gigshield-ui.tsx",
+    "src/components/searchProvider.tsx",
+    "src/components/theme-initializer.tsx",
+    "src/components/theme-provider.tsx",
+    "src/components/layout/**/*.tsx",
+    "src/components/ui/button.tsx",
+    "src/components/ui/sidebar.tsx",
+    "src/components/ui/sonner.tsx",
+    "src/data/gigshield-data.ts",
+    "src/lib/utils.ts",
+    "src/store/layoutStore.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/app/(private)/admin/**/*",
+    "src/app/(private)/mentor/**/*",
+    "src/components/command-menu.tsx",
+    "src/components/profile-dropdown.tsx",
+    "src/components/ui/accordion.tsx",
+    "src/components/ui/app-sidebar.tsx",
+    "src/components/ui/calendar.tsx",
+    "src/components/ui/form.tsx",
+    "src/components/ui/fuzzy-text.tsx",
+    "src/components/ui/nav-group.tsx",
+    "src/components/ui/nav-item.tsx",
+    "src/data/sidebar-data.ts",
+    "src/utils/crypto.ts",
+    "src/utils/encryption.ts"
   ]
 }

@@ -284,7 +284,7 @@ export function GaugeCard({ value }: { value: number }) {
         <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart innerRadius="70%" outerRadius="100%" data={chartData} startAngle={180} endAngle={0} barSize={18}>
             <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
-            <RadialBar background clockWise dataKey="value" cornerRadius={20} />
+            <RadialBar background dataKey="value" cornerRadius={20} />
             <Tooltip />
           </RadialBarChart>
         </ResponsiveContainer>

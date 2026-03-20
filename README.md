@@ -87,6 +87,12 @@ Thursday    → ₹300 lands in Raju's UPI by 3:00 PM. He smiles.
 
 ---
 
+## 🏗️ System Architecture
+
+![Devspirits Architecture](./public/architecture.png)
+
+---
+
 ## 🔄 How It Works — Full Workflow
 
 ```
@@ -261,15 +267,42 @@ With Devspirits Shield → 487 blocked. 13 legitimate workers paid. System safe.
 
 ### 10-Layer Defense Stack
 
-**Layer 1 — Multi-Signal Location Truth**
-GPS alone is not truth. We cross-validate:
-- GPS coordinates
-- Network tower triangulation
-- IP geolocation
-- Device-reported location
-> All four must converge within a 500m radius. GPS spoofing fails here.
+---
+
+> ### 🗺️ Layer 1 — Multi-Signal Location Truth *(GPS-Free Fallback Included)*
+>
+> **GPS alone is not truth — and we don't depend on it.**
+>
+> Devspirits cross-validates location using **four independent signals**. Even if GPS is unavailable, spoofed, or disabled, we confirm the worker's real physical location through:
+>
+> | Signal | Method | Spoof-Resistance |
+> |---|---|---|
+> | 📡 **Cell Tower Triangulation** | Triangulates position from 3+ nearest towers using signal strength (RSSI) and timing advance | Cannot be spoofed without physical proximity to real towers |
+> | 📶 **WiFi Fingerprinting** | Maps surrounding WiFi access point BSSIDs + signal strengths against a known zone-level fingerprint database | AP identifiers are hyperlocal — impossible to fake remotely |
+> | 🛰️ GPS Coordinates | Standard device GPS | Easy to spoof with mock location apps |
+> | 🌐 IP Geolocation | ISP-reported location of network connection | Moderate confidence signal |
+>
+> **How it works without GPS:**
+> ```
+> Worker's phone passively scans nearby cell towers and WiFi APs
+>     │
+>     ├─ Cell towers: Compare to known tower positions in zone DB
+>     │   → Triangulate physical position within ~150m radius
+>     │
+>     └─ WiFi APs: Match BSSID fingerprint against zone-level AP map
+>         → Confirm zone with ~50–100m accuracy
+>
+> All four signals must agree within a 500m radius.
+> A spoofed GPS with a fake IP from a different city?
+> → Cell tower data says otherwise. Claim blocked.
+> ```
+>
+> **Why this matters:** A fraudster sitting at home in Delhi cannot fake the cell tower signature of HSR Layout, Bengaluru. They cannot replicate the WiFi AP fingerprint of a specific delivery zone. Location truth is anchored to physical reality — not just a coordinate.
+
+---
 
 **Layer 2 — Behavioral Fingerprint Engine**
+
 Every worker builds a behavioral profile over time:
 - Typical active hours (e.g., 10am–2pm, 6pm–10pm)
 - Average deliveries/day, typical zone radius
@@ -300,10 +333,11 @@ Delivery logs (mock Zomato API) confirm this.
 ```
 
 **Layer 5 — Identity Graph Analysis**
+
 We build a graph of account relationships:
 ```
 Nodes: Worker accounts
-Edges: Shared device ID, shared UPI ID, shared IP address, 
+Edges: Shared device ID, shared UPI ID, shared IP address,
        shared phone number prefix patterns
 
 A cluster of 50 accounts all sharing the same device IMEI hash?
@@ -312,7 +346,7 @@ A cluster of 50 accounts all sharing the same device IMEI hash?
 
 **Layer 6 — Temporal Spike Detection**
 ```
-Normal rain event: Claims arrive gradually over 30–45 minutes as workers 
+Normal rain event: Claims arrive gradually over 30–45 minutes as workers
                    realize they can't work.
 
 Fraud event: 500 claims arrive within 90 seconds of trigger activation.
@@ -333,7 +367,7 @@ If claim volume in any 5-minute window exceeds 3× daily average:
 
 | Signal | Weight | Score Contribution |
 |---|---|---|
-| GPS multi-signal mismatch | 30% | 0–30 pts |
+| GPS + Cell Tower + WiFi multi-signal mismatch | 30% | 0–30 pts |
 | Behavioral anomaly | 25% | 0–25 pts |
 | Cluster detection hit | 20% | 0–20 pts |
 | No pre-event activity | 15% | 0–15 pts |
@@ -346,6 +380,7 @@ Score 66–100 → ❌ Block + flag
 ```
 
 **Layer 9 — Fairness Protection**
+
 We know false positives hurt real workers. So:
 - Held claims get **partial advance payout** (50%) pending review
 - Any blocked claim gets an **appeal process** via WhatsApp
@@ -399,6 +434,8 @@ New attack patterns are learned within 48 hours of detection
 │  NDMA Alert Feed (Flood/curfew)          │
 │  Razorpay Test Mode (Payout simulation)  │
 │  Mock Zomato/Swiggy Activity API         │
+│  Cell Tower API (Location truth layer)   │
+│  WiFi Fingerprint DB (Zone mapping)      │
 └──────────────────────────────────────────┘
 ```
 
@@ -472,20 +509,20 @@ We chose a **Progressive Web App (PWA)** over a native mobile app, and here's wh
 Devspirits v1 is just the start. Here's where this goes:
 
 ```
-2026 Q3  → Expand to E-commerce (Amazon/Flipkart) and 
+2026 Q3  → Expand to E-commerce (Amazon/Flipkart) and
             Q-Commerce (Zepto/Blinkit) delivery personas
 
-2026 Q4  → Traffic disruption coverage 
+2026 Q4  → Traffic disruption coverage
             (major accidents blocking delivery routes)
 
 2027 Q1  → Platform downtime insurance
             (Zomato app crash = 0 orders = real income loss)
 
 2027 Q3  → Deep learning models for 7-day disruption forecasting
-            (predict disruptions before they happen, 
+            (predict disruptions before they happen,
              adjust coverage proactively)
 
-2028     → White-label API for platforms to embed Devspirits 
+2028     → White-label API for platforms to embed Devspirits
             directly into Zomato/Swiggy partner apps
 ```
 
