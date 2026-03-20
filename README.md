@@ -28,20 +28,20 @@ Built for → **Guidewire DEVTrails 2026** | Persona → **Food Delivery Partner
 India has **~15 million gig delivery workers**. Every single day, they wake up not knowing what the sky will do to their earnings.
 
 ```
-A Zomato delivery partner in Mumbai earns ₹700–₹1,000/day.
+A Zomato delivery partner in Mumbai earns ₹700-₹1,000/day.
 One heavy rain day = ₹0 earned. No compensation. No safety net.
 That's not a bad day. That's a financial crisis.
 ```
 
 | The Disruption | What Happens | What They Lose |
 |---|---|---|
-| 🌧️ Heavy Rain (>50mm) | Roads flood, orders cancel | ₹600–900/day |
-| 🔥 Extreme Heat (>42°C) | Platform restricts rides | ₹400–700/day |
-| 😷 Severe AQI (>300) | Outdoor work halts | ₹500–800/day |
-| 🌊 Government Flood Alert | Zone access blocked | ₹700–1,000/day |
-| 🚫 Curfew / Local Strike | Cannot operate | ₹700–1,000/day |
+| 🌧️ Heavy Rain (>50mm) | Roads flood, orders cancel | ₹600-900/day |
+| 🔥 Extreme Heat (>42°C) | Platform restricts rides | ₹400-700/day |
+| 😷 Severe AQI (>300) | Outdoor work halts | ₹500-800/day |
+| 🌊 Government Flood Alert | Zone access blocked | ₹700-1,000/day |
+| 🚫 Curfew / Local Strike | Cannot operate | ₹700-1,000/day |
 
-**The math is brutal**: A single disruption week = 20–30% monthly income loss. Multiply that by 15 million workers. That's India's invisible financial crisis happening in plain sight.
+**The math is brutal**: A single disruption week = 20-30% monthly income loss. Multiply that by 15 million workers. That's India's invisible financial crisis happening in plain sight.
 
 **Existing solutions? Zero.** Traditional insurance won't touch this. Banks won't lend. The platforms don't compensate. **Devspirits fills this void.**
 
@@ -66,8 +66,8 @@ That's not a bad day. That's a financial crisis.
 Name    : Raju Kumar
 Age     : 28
 City    : Bengaluru (HSR Layout zone)
-Platform: Zomato (Full-time, 10–12 hrs/day)
-Income  : ₹800–₹1,100/day | ₹5,600–₹7,700/week
+Platform: Zomato (Full-time, 10-12 hrs/day)
+Income  : ₹800-₹1,100/day | ₹5,600-₹7,700/week
 Device  : Android (₹8,000 phone, 4G)
 Pain    : "Baarish mein koi order nahi aata. Ghar kaise chalaye?"
           (No orders in rain. How do I run my home?)
@@ -136,7 +136,7 @@ Thursday    → ₹300 lands in Raju's UPI by 3:00 PM. He smiles.
   [6] AUTOMATED CLAIM PROCESSING
       │
       ├─ Fraud Score < 40 → Auto-approved
-      ├─ Fraud Score 40–70 → Delayed (manual review queue, 4 hrs)
+      ├─ Fraud Score 40-70 → Delayed (manual review queue, 4 hrs)
       └─ Fraud Score > 70 → Blocked + flagged for investigation
 
   [7] INSTANT PAYOUT
@@ -290,7 +290,7 @@ With Devspirits Shield → 487 blocked. 13 legitimate workers paid. System safe.
 >     │   → Triangulate physical position within ~150m radius
 >     │
 >     └─ WiFi APs: Match BSSID fingerprint against zone-level AP map
->         → Confirm zone with ~50–100m accuracy
+>         → Confirm zone with ~50-100m accuracy
 >
 > All four signals must agree within a 500m radius.
 > A spoofed GPS with a fake IP from a different city?
@@ -304,7 +304,7 @@ With Devspirits Shield → 487 blocked. 13 legitimate workers paid. System safe.
 **Layer 2 - Behavioral Fingerprint Engine**
 
 Every worker builds a behavioral profile over time:
-- Typical active hours (e.g., 10am–2pm, 6pm–10pm)
+- Typical active hours (e.g., 10am-2pm, 6pm-10pm)
 - Average deliveries/day, typical zone radius
 - App interaction patterns
 
@@ -346,7 +346,7 @@ A cluster of 50 accounts all sharing the same device IMEI hash?
 
 **Layer 6 - Temporal Spike Detection**
 ```
-Normal rain event: Claims arrive gradually over 30–45 minutes as workers
+Normal rain event: Claims arrive gradually over 30-45 minutes as workers
                    realize they can't work.
 
 Fraud event: 500 claims arrive within 90 seconds of trigger activation.
@@ -367,16 +367,16 @@ If claim volume in any 5-minute window exceeds 3× daily average:
 
 | Signal | Weight | Score Contribution |
 |---|---|---|
-| GPS + Cell Tower + WiFi multi-signal mismatch | 30% | 0–30 pts |
-| Behavioral anomaly | 25% | 0–25 pts |
-| Cluster detection hit | 20% | 0–20 pts |
-| No pre-event activity | 15% | 0–15 pts |
-| Identity graph link | 10% | 0–10 pts |
+| GPS + Cell Tower + WiFi multi-signal mismatch | 30% | 0-30 pts |
+| Behavioral anomaly | 25% | 0-25 pts |
+| Cluster detection hit | 20% | 0-20 pts |
+| No pre-event activity | 15% | 0-15 pts |
+| Identity graph link | 10% | 0-10 pts |
 
 ```
-Score 0–35   → ✅ Auto-approve
-Score 36–65  → ⏳ Hold for 4-hr review
-Score 66–100 → ❌ Block + flag
+Score 0-35   → ✅ Auto-approve
+Score 36-65  → ⏳ Hold for 4-hr review
+Score 66-100 → ❌ Block + flag
 ```
 
 **Layer 9 - Fairness Protection**
@@ -448,7 +448,7 @@ We chose a **Progressive Web App (PWA)** over a native mobile app, and here's wh
 | Factor | Native App | PWA (Our Choice) |
 |---|---|---|
 | Installation | Requires Play Store download | Opens instantly in browser |
-| Device storage | 40–80 MB | ~5 MB cached |
+| Device storage | 40-80 MB | ~5 MB cached |
 | Low-storage phones | Often fails | Works perfectly |
 | Offline support | Requires development | Built into PWA spec |
 | Updates | User must update manually | Auto-updates silently |
@@ -460,7 +460,7 @@ We chose a **Progressive Web App (PWA)** over a native mobile app, and here's wh
 
 ## 📅 6-Week Development Plan
 
-### Phase 1 - Weeks 1–2: Foundation *(March 4–20)*
+### Phase 1 - Weeks 1-2: Foundation *(March 4-20)*
 - [x] Ideation and use case finalization
 - [x] Persona research (Zomato/Swiggy delivery partners)
 - [x] This README document
@@ -474,13 +474,13 @@ We chose a **Progressive Web App (PWA)** over a native mobile app, and here's wh
 
 ---
 
-### Phase 2 - Weeks 3–4: Core Engine *(March 21–April 4)*
+### Phase 2 - Weeks 3-4: Core Engine *(March 21-April 4)*
 - [ ] Worker registration + OTP flow
 - [ ] AI risk profiling → weekly premium calculation
 - [ ] Policy creation + storage (MongoDB)
 - [ ] Weather + AQI API integration (real + mock)
 - [ ] Trigger detection engine (5 parametric triggers)
-- [ ] Basic fraud scoring (Layers 1–4)
+- [ ] Basic fraud scoring (Layers 1-4)
 - [ ] Mock payout flow (Razorpay test mode)
 - [ ] Basic worker dashboard
 
@@ -488,7 +488,7 @@ We chose a **Progressive Web App (PWA)** over a native mobile app, and here's wh
 
 ---
 
-### Phase 3 - Weeks 5–6: Shield + Scale *(April 5–17)*
+### Phase 3 - Weeks 5-6: Shield + Scale *(April 5-17)*
 - [ ] Full 10-layer fraud detection system
 - [ ] Identity graph analysis (NetworkX)
 - [ ] Circuit breaker mechanism
