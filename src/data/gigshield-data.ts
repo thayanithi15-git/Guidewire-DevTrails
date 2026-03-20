@@ -333,33 +333,43 @@ export const settingsGroups = [
 
 export const landingHighlights = [
   {
-    title: "AI weekly pricing",
-    description: "Hyperlocal premium scoring using forecast, pollution, and zone disruption history.",
+    title: "AI-powered weekly pricing",
+    description: "Dynamic premiums as low as ₹30/week based on hyperlocal weather, AQI, zone disruption history, and your working hours.",
     icon: Gauge,
   },
   {
-    title: "Zero-touch claims",
-    description: "Once a parametric trigger fires, claims are initiated and validated automatically.",
+    title: "Zero-touch automated claims",
+    description: "Parametric triggers detect disruptions and initiate claims instantly—no documentation needed. Get paid within seconds.",
     icon: Zap,
   },
   {
-    title: "Fraud shield",
-    description: "GPS anomaly checks, duplicate detection, and activity validation protect the pool.",
+    title: "Intelligent fraud detection",
+    description: "AI detects GPS spoofing, duplicate claims, and anomalous patterns to keep premiums low for honest workers.",
     icon: ShieldAlert,
   },
   {
-    title: "Instant payouts",
-    description: "Lost income reaches the rider through mock UPI payout simulation in seconds.",
+    title: "Instant UPI payouts",
+    description: "Lost income goes directly to your UPI in seconds using simulated payment rails aligned with your earnings cycle.",
     icon: Banknote,
+  },
+  {
+    title: "Income protection only",
+    description: "Insure lost wages from uncontrollable events—extreme weather, AQI spikes, floods, zone closures—not vehicle repairs.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Hyper-local risk mapping",
+    description: "Coverage tailored to your delivery zone with real-time weather feeds, traffic data, and disruption history.",
+    icon: MapPinned,
   },
 ];
 
 export const landingJourney = [
-  { step: "01", title: "Onboard", description: "Worker profile, city zone, weekly income and payout setup." },
-  { step: "02", title: "Score risk", description: "AI estimates risk and sets a transparent weekly premium." },
-  { step: "03", title: "Monitor triggers", description: "Weather, AQI, flood and closure feeds are tracked live." },
-  { step: "04", title: "Auto claim", description: "Claims are validated instantly when the disruption matches rules." },
-  { step: "05", title: "Pay out", description: "Weekly income loss is transferred through simulated payout rails." },
+  { step: "01", title: "Quick onboarding", description: "Phone, UPI, zone, and platform details—done in 2 minutes." },
+  { step: "02", title: "AI risk assessment", description: "AI scores your zone and work pattern to set a transparent weekly premium." },
+  { step: "03", title: "Live monitoring", description: "Real-time feeds track weather, AQI, floods, traffic, and zone closures." },
+  { step: "04", title: "Auto-trigger claims", description: "Disruption detected → Claim initiated → AI fraud checks in real-time." },
+  { step: "05", title: "Instant income recovery", description: "Lost wages hit your UPI in seconds. No waiting, no paperwork." },
 ];
 
 export const heroStats = [
@@ -386,4 +396,157 @@ export const quickActions = [
   { title: "Create demo trigger", description: "Simulate a rainstorm and open a claim", icon: RadioTower },
   { title: "Review payout rail", description: "Check payout success and recovery timeline", icon: Banknote },
   { title: "Inspect policy cover", description: "See covered hours and weekly premium logic", icon: ShieldCheck },
+];
+
+// New landing page sections
+export const disruptions = [
+  {
+    icon: CloudRain,
+    title: "Heavy Rain & Floods",
+    description: "Rain exceeding 20mm/hr or 3+ hours of continuous rain triggers automatic income protection.",
+    examples: ["Monsoon season delivery halts", "Waterlogged zones", "Gig platforms reducing orders by 50%+"],
+  },
+  {
+    icon: Wind,
+    title: "Severe Pollution & Heat",
+    description: "AQI spikes above 300 or extreme heat above 42°C qualify for coverage when working hours drop.",
+    examples: ["Smog-induced delivery reduction", "Summer heat waves", "App orders decline during poor air quality"],
+  },
+  {
+    icon: AlertTriangle,
+    title: "Zone Closures & Curfews",
+    description: "Unexpected market closures, local strikes, or unplanned curfews blocking delivery zones.",
+    examples: ["Municipal restrictions", "Sudden strike declarations", "Event-based zone lockdowns"],
+  },
+  {
+    icon: RadioTower,
+    title: "Platform App Crashes",
+    description: "Multi-hour outages of delivery apps causing loss of order access and instant earnings.",
+    examples: ["Zomato/Swiggy app down", "Payment gateway failures", "Order matching issues"],
+  },
+];
+
+export const landingFaq = [
+  {
+    q: "Is this health or accident insurance?",
+    a: "No. GigShield protects your lost income during disruptions—not medical bills or vehicle repairs. This is parametric income protection designed specifically for gig workers.",
+  },
+  {
+    q: "How often will I pay for coverage?",
+    a: "Weekly. Your premium aligns with your earnings cycle—typically ₹30–₹80 per week, auto-deducted on Sunday evening.",
+  },
+  {
+    q: "What triggers a claim automatically?",
+    a: "Real-time parametric feeds: heavy rain (>20mm/hr), AQI >300, floods, zone closures, or app crashes verified against your active delivery hours.",
+  },
+  {
+    q: "Will my premium increase if I make a claim?",
+    a: "No. Verified claims don't affect your premium. Our AI focuses on fraud detection, not penalizing honest claims.",
+  },
+  {
+    q: "How fast do I get paid?",
+    a: "Instantly. Once a claim is auto-approved (typically within 30 seconds), your payout hits your UPI in seconds.",
+  },
+  {
+    q: "Can I cancel anytime?",
+    a: "Yes. Weekly policies mean you can stop coverage after the current week ends—no long-term lock-in.",
+  },
+  {
+    q: "Does this work if I deliver for multiple apps?",
+    a: "Yes. Our AI models multi-app delivery patterns and calculates premiums considering your total risk across all platforms.",
+  },
+  {
+    q: "What if there's a dispute?",
+    a: "Our AI is transparent. You can inspect the exact parameters that triggered your claim in the dashboard and appeal if needed.",
+  },
+];
+
+export const testimonials = [
+  {
+    name: "Raju Kumar",
+    role: "Swiggy Delivery Partner",
+    city: "Bengaluru",
+    quote: "During monsoon, I lost ₹2,000+ a week. Now with GigShield, at least the heavy rain days are covered. The weekly pricing fits my budget perfectly.",
+    platform: "Swiggy",
+  },
+  {
+    name: "Priya Sharma",
+    role: "Zomato & Amazon Flex",
+    city: "Mumbai",
+    quote: "The automatic claim process is a game-changer. No forms, no waiting. My claim hit my UPI in seconds when the AQI spiked.",
+    platform: "Multi-app",
+  },
+  {
+    name: "Vikram Patel",
+    role: "Food Delivery Partner",
+    city: "Delhi NCR",
+    quote: "Finally, someone built insurance for us—gig workers. The weekly pricing and no health-related restrictions make it actually useful.",
+    platform: "Zomato",
+  },
+];
+
+export const pricingTiers = [
+  {
+    name: "Zone Tier 1",
+    description: "Low historical disruption",
+    startingPrice: "₹30",
+    features: [
+      "Up to 8 hours weekly coverage",
+      "Rain & pollution triggers",
+      "Basic fraud detection",
+      "UPI payouts",
+    ],
+  },
+  {
+    name: "Zone Tier 2",
+    description: "Medium risk zone",
+    startingPrice: "₹49",
+    features: [
+      "Up to 10 hours weekly coverage",
+      "All disruption triggers",
+      "Advanced AI fraud checks",
+      "Instant UPI payouts",
+      "Zone heatmap access",
+    ],
+    highlighted: true,
+  },
+  {
+    name: "Zone Tier 3",
+    description: "High disruption risk",
+    startingPrice: "₹65",
+    features: [
+      "Up to 12 hours weekly coverage",
+      "All triggers + app crash protection",
+      "GPS anomaly detection",
+      "Priority claim review",
+      "Zone heatmap + predictive alerts",
+    ],
+  },
+];
+
+export const trustIndicators = [
+  { metric: "Active Delivery Partners", value: "2,840+", subtext: "across Bengaluru, Mumbai, Delhi" },
+  { metric: "Total Claims Approved", value: "12,400+", subtext: "worth ₹92 lakhs paid in 8 weeks" },
+  { metric: "AI Fraud Accuracy", value: "96.2%", subtext: "anomalies caught pre-payout" },
+  { metric: "Avg Claim Decision", value: "<30 seconds", subtext: "fully automated, parametric" },
+];
+
+export const integrations = [
+  { name: "Weather APIs", type: "Real-time rain, AQI, heat tracking" },
+  { name: "Traffic Data", type: "Zone-level delivery performance" },
+  { name: "Platform APIs", type: "Swiggy, Zomato, Amazon, Zepto simulated" },
+  { name: "Payment Stack", type: "UPI, bank transfers, mobile wallets" },
+];
+
+export const ctaButtons = [
+  {
+    primary: "Launch Demo",
+    href: "/auth/access",
+    description: "Walk through a complete claim scenario in 3 mins",
+  },
+  {
+    secondary: "View Dashboard",
+    href: "/student/dashboard",
+    description: "See worker dashboard & admin analytics",
+  },
 ];
