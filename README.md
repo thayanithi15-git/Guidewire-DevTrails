@@ -9,15 +9,15 @@ Built for → **Guidewire DEVTrails 2026** | Persona → **Food Delivery Partner
 ## 🧭 Table of Contents
 
 1. [The Real Problem](#-the-real-problem)
-2. [Our Solution — At a Glance](#-our-solution--at-a-glance)
+2. [Our Solution - At a Glance](#-our-solution--at-a-glance)
 3. [Persona Deep Dive](#-persona-deep-dive--meet-raju)
-4. [How It Works — Full Workflow](#-how-it-works--full-workflow)
+4. [How It Works - Full Workflow](#-how-it-works--full-workflow)
 5. [Weekly Premium Model](#-weekly-premium-model)
 6. [Parametric Triggers](#-parametric-triggers)
 7. [AI/ML Architecture](#-aiml-architecture)
 8. [Fraud Detection Engine](#-fraud-detection-engine--the-shield)
 9. [Tech Stack](#-tech-stack)
-10. [Platform Choice — Why Web?](#-platform-choice--why-web)
+10. [Platform Choice - Why Web?](#-platform-choice--why-web)
 11. [Development Plan](#-6-week-development-plan)
 12. [Future Vision](#-future-vision)
 
@@ -47,20 +47,20 @@ That's not a bad day. That's a financial crisis.
 
 ---
 
-## 💡 Our Solution — At a Glance
+## 💡 Our Solution - At a Glance
 
 **Devspirits** is a real-time, AI-driven **parametric income insurance platform** that:
 
-- ✅ **Pays automatically** when verified disruptions occur — no claim filing, no waiting
+- ✅ **Pays automatically** when verified disruptions occur - no claim filing, no waiting
 - ✅ **Prices dynamically** based on hyperlocal risk (weather patterns, zones, seasons)
 - ✅ **Detects fraud** using a multi-layer AI defense that GPS spoofing cannot fool
-- ✅ **Operates weekly** — aligned with how gig workers actually live and earn
+- ✅ **Operates weekly** - aligned with how gig workers actually live and earn
 
 > **Parametric Insurance** = Pre-agreed triggers → Automatic payout. No paperwork. No rejection. No delays. Just money in your UPI wallet when you need it most.
 
 ---
 
-## 👤 Persona Deep Dive — Meet Raju
+## 👤 Persona Deep Dive - Meet Raju
 
 ```
 Name    : Raju Kumar
@@ -93,7 +93,7 @@ Thursday    → ₹300 lands in Raju's UPI by 3:00 PM. He smiles.
 
 ---
 
-## 🔄 How It Works — Full Workflow
+## 🔄 How It Works - Full Workflow
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -201,7 +201,7 @@ These are the **objective, verifiable thresholds** that fire automatic payouts. 
 - Maximum **2 triggers per week** count toward payout (prevents compounding edge cases)
 - Maximum weekly payout = **₹700** (protects fund liquidity)
 - Payouts are **proportional** if a disruption lasts partial day (e.g., 4-hour rain = 50% payout)
-- Triggers require **zone confirmation** — national news ≠ local disruption
+- Triggers require **zone confirmation** - national news ≠ local disruption
 
 ---
 
@@ -245,11 +245,11 @@ Estimated income lost = Daily income × disruption hours ÷ 10 × severity
 Payout = min(Estimated income lost, Maximum payout cap for trigger type)
 ```
 
-This means a worker earning ₹1,000/day gets a higher payout than one earning ₹500/day — because their actual loss is higher.
+This means a worker earning ₹1,000/day gets a higher payout than one earning ₹500/day - because their actual loss is higher.
 
 ---
 
-## 🛡️ Fraud Detection Engine — The Shield
+## 🛡️ Fraud Detection Engine - The Shield
 
 This is where Devspirits is truly differentiated. We built for the worst case: **a coordinated fraud ring of 500 fake accounts, all with GPS spoofing.**
 
@@ -269,16 +269,16 @@ With Devspirits Shield → 487 blocked. 13 legitimate workers paid. System safe.
 
 ---
 
-> ### 🗺️ Layer 1 — Multi-Signal Location Truth *(GPS-Free Fallback Included)*
+> ### 🗺️ Layer 1 - Multi-Signal Location Truth *(GPS-Free Fallback Included)*
 >
-> **GPS alone is not truth — and we don't depend on it.**
+> **GPS alone is not truth - and we don't depend on it.**
 >
 > Devspirits cross-validates location using **four independent signals**. Even if GPS is unavailable, spoofed, or disabled, we confirm the worker's real physical location through:
 >
 > | Signal | Method | Spoof-Resistance |
 > |---|---|---|
 > | 📡 **Cell Tower Triangulation** | Triangulates position from 3+ nearest towers using signal strength (RSSI) and timing advance | Cannot be spoofed without physical proximity to real towers |
-> | 📶 **WiFi Fingerprinting** | Maps surrounding WiFi access point BSSIDs + signal strengths against a known zone-level fingerprint database | AP identifiers are hyperlocal — impossible to fake remotely |
+> | 📶 **WiFi Fingerprinting** | Maps surrounding WiFi access point BSSIDs + signal strengths against a known zone-level fingerprint database | AP identifiers are hyperlocal - impossible to fake remotely |
 > | 🛰️ GPS Coordinates | Standard device GPS | Easy to spoof with mock location apps |
 > | 🌐 IP Geolocation | ISP-reported location of network connection | Moderate confidence signal |
 >
@@ -297,11 +297,11 @@ With Devspirits Shield → 487 blocked. 13 legitimate workers paid. System safe.
 > → Cell tower data says otherwise. Claim blocked.
 > ```
 >
-> **Why this matters:** A fraudster sitting at home in Delhi cannot fake the cell tower signature of HSR Layout, Bengaluru. They cannot replicate the WiFi AP fingerprint of a specific delivery zone. Location truth is anchored to physical reality — not just a coordinate.
+> **Why this matters:** A fraudster sitting at home in Delhi cannot fake the cell tower signature of HSR Layout, Bengaluru. They cannot replicate the WiFi AP fingerprint of a specific delivery zone. Location truth is anchored to physical reality - not just a coordinate.
 
 ---
 
-**Layer 2 — Behavioral Fingerprint Engine**
+**Layer 2 - Behavioral Fingerprint Engine**
 
 Every worker builds a behavioral profile over time:
 - Typical active hours (e.g., 10am–2pm, 6pm–10pm)
@@ -314,7 +314,7 @@ suddenly claims a Monday flood disruption.
 → Behavior deviation score: HIGH
 ```
 
-**Layer 3 — Geo-Spatial Cluster Detection**
+**Layer 3 - Geo-Spatial Cluster Detection**
 ```
 Rule: If > 20 unique accounts share the same GPS coordinate
       within a 10-meter radius → Flag as coordinated fraud
@@ -323,7 +323,7 @@ Real workers spread across a zone.
 Fraud rings cluster at a single coordinate.
 ```
 
-**Layer 4 — Pre-Event Activity Validation**
+**Layer 4 - Pre-Event Activity Validation**
 ```
 Requirement: Worker must have had verifiable platform activity
              in the 4 hours BEFORE the disruption trigger fires.
@@ -332,7 +332,7 @@ No activity before event → No payout.
 Delivery logs (mock Zomato API) confirm this.
 ```
 
-**Layer 5 — Identity Graph Analysis**
+**Layer 5 - Identity Graph Analysis**
 
 We build a graph of account relationships:
 ```
@@ -344,7 +344,7 @@ A cluster of 50 accounts all sharing the same device IMEI hash?
 → Fraud ring identified. Entire cluster blocked.
 ```
 
-**Layer 6 — Temporal Spike Detection**
+**Layer 6 - Temporal Spike Detection**
 ```
 Normal rain event: Claims arrive gradually over 30–45 minutes as workers
                    realize they can't work.
@@ -354,7 +354,7 @@ Fraud event: 500 claims arrive within 90 seconds of trigger activation.
 Pattern recognition fires. Circuit breaker activates.
 ```
 
-**Layer 7 — Circuit Breaker (Critical)**
+**Layer 7 - Circuit Breaker (Critical)**
 ```
 If claim volume in any 5-minute window exceeds 3× daily average:
     → Pause all new payouts
@@ -363,7 +363,7 @@ If claim volume in any 5-minute window exceeds 3× daily average:
     → Resume after human + AI joint approval
 ```
 
-**Layer 8 — Fraud Risk Score (Composite)**
+**Layer 8 - Fraud Risk Score (Composite)**
 
 | Signal | Weight | Score Contribution |
 |---|---|---|
@@ -379,14 +379,14 @@ Score 36–65  → ⏳ Hold for 4-hr review
 Score 66–100 → ❌ Block + flag
 ```
 
-**Layer 9 — Fairness Protection**
+**Layer 9 - Fairness Protection**
 
 We know false positives hurt real workers. So:
 - Held claims get **partial advance payout** (50%) pending review
 - Any blocked claim gets an **appeal process** via WhatsApp
 - Workers with 6+ months clean history get **trust fast-track** (auto-approve for scores up to 55)
 
-**Layer 10 — Adaptive Learning**
+**Layer 10 - Adaptive Learning**
 ```
 Every confirmed fraud case → Feeds back into model training
 Model retrained: Weekly (lightweight update) + Monthly (full retrain)
@@ -441,7 +441,7 @@ New attack patterns are learned within 48 hours of detection
 
 ---
 
-## 📱 Platform Choice — Why Web?
+## 📱 Platform Choice - Why Web?
 
 We chose a **Progressive Web App (PWA)** over a native mobile app, and here's why this is the right call for this persona:
 
@@ -460,7 +460,7 @@ We chose a **Progressive Web App (PWA)** over a native mobile app, and here's wh
 
 ## 📅 6-Week Development Plan
 
-### Phase 1 — Weeks 1–2: Foundation *(March 4–20)*
+### Phase 1 - Weeks 1–2: Foundation *(March 4–20)*
 - [x] Ideation and use case finalization
 - [x] Persona research (Zomato/Swiggy delivery partners)
 - [x] This README document
@@ -474,7 +474,7 @@ We chose a **Progressive Web App (PWA)** over a native mobile app, and here's wh
 
 ---
 
-### Phase 2 — Weeks 3–4: Core Engine *(March 21–April 4)*
+### Phase 2 - Weeks 3–4: Core Engine *(March 21–April 4)*
 - [ ] Worker registration + OTP flow
 - [ ] AI risk profiling → weekly premium calculation
 - [ ] Policy creation + storage (MongoDB)
@@ -488,7 +488,7 @@ We chose a **Progressive Web App (PWA)** over a native mobile app, and here's wh
 
 ---
 
-### Phase 3 — Weeks 5–6: Shield + Scale *(April 5–17)*
+### Phase 3 - Weeks 5–6: Shield + Scale *(April 5–17)*
 - [ ] Full 10-layer fraud detection system
 - [ ] Identity graph analysis (NetworkX)
 - [ ] Circuit breaker mechanism
@@ -528,19 +528,9 @@ Devspirits v1 is just the start. Here's where this goes:
 
 ---
 
-## 👥 Team — Devspirits
+## 👥 Team - Devspirits
 
 > *We are building this because we believe the people who deliver our food in the rain deserve a system that fights for them.*
-
----
-
-## 📎 Links
-
-| Resource | Link |
-|---|---|
-| 🗂️ GitHub Repository | *(link here)* |
-| 🎥 Phase 1 Strategy Video | *(link here)* |
-| 📊 Figma Wireframes | *(link here)* |
 
 ---
 
