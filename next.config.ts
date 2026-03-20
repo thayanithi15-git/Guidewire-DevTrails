@@ -1,24 +1,11 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  /* config options here */
+import type { NextConfig } from "next";
 
-  // Performance optimizations
+const nextConfig: NextConfig = {
   experimental: {
-    // appDir: true,
-    optimizeCss: true,
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-avatar'],
+    optimizePackageImports: ["lucide-react", "@radix-ui/react-avatar"],
   },
-
-  // Compiler optimizations
-  compiler: {
-    // removeConsole: process.env.NODE_ENV === 'production',
-  },
-
   typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
+    ignoreBuildErrors: false,
   },
 };
 
