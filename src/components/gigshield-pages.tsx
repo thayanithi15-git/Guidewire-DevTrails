@@ -897,6 +897,26 @@ export function SignInPageView() {
   );
 }
 
+export function FraudMonitorPageView() {
+  return (
+    <PageShell
+      eyebrow="Integrity Operations"
+      title="Fraud Monitor"
+      description="Real-time detection of anomaly signals and suspicious claim patterns."
+      actions={<Button className="btn-premium bg-foreground text-white rounded-full font-bold px-6 shadow-xl"><ShieldAlert size={18} className="mr-2" /> Run Deep Scan</Button>}
+    >
+      <div className="grid gap-8 xl:grid-cols-[1.5fr_1fr]">
+        <SectionCard title="Anomaly Risk Assessment" description="Current fraud signals detected across active policies.">
+          <AlertList items={fraudAlerts} />
+        </SectionCard>
+        <SectionCard title="Attempted Violations" description="Historical trends in spoofing or false claims.">
+           <EarningsAreaChart data={fraudTrend} />
+        </SectionCard>
+      </div>
+    </PageShell>
+  );
+}
+
 // Sub-components
 
 function ForecastTile({ icon: Icon, label, value }: { icon: typeof CloudRain; label: string; value: string }) {
