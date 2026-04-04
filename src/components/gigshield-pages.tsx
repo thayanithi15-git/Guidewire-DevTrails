@@ -1,7 +1,8 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   BadgeIndianRupee,
   BellRing,
@@ -17,6 +18,17 @@ import {
   WalletCards,
   Waves,
   Zap,
+  Link2,
+  ExternalLink,
+  ChevronRight,
+  ShieldCheck,
+  CheckCircle2,
+  X,
+  SmartphoneIcon,
+  CircleCheck,
+  Mail,
+  Lock,
+  Fingerprint,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -75,41 +87,246 @@ import {
   workerProfile,
   zoneRisks,
 } from "@/data/gigshield-data";
+import { cn } from "@/lib/utils";
+
+// --- CUSTOM COMPONENTS FOR DEVSPIRITS ---
+
+/**
+ * Razorpay Simulation Modal
+ */
+function RazorpayModal({ isOpen, onClose, onComplete, amount }: { isOpen: boolean, onClose: () => void, onComplete: () => void, amount: string }) {
+  const [step, setStep] = useState(1); // 1: Method, 2: Processing, 3: Success
+
+  useEffect(() => {
+    if (step === 2) {
+      const timer = setTimeout(() => setStep(3), 2000);
+      return () => clearTimeout(timer);
+    }
+    if (step === 3) {
+        const timer = setTimeout(() => {
+            onComplete();
+            onClose();
+        }, 1500);
+        return () => clearTimeout(timer);
+    }
+  }, [step]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md transition-all">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="w-full max-w-md overflow-hidden bg-white rounded-2xl shadow-2xl"
+      >
+        <div className="bg-[#1D212F] p-6 text-white flex items-center justify-between">
+          <div className="flex items-center gap-3">
+             <div className="h-8 w-8 bg-blue-600 rounded flex items-center justify-center font-bold italic">R</div>
+             <div>
+               <p className="text-[10px] uppercase font-bold tracking-widest text-white/50 leading-tight">Paying to</p>
+               <p className="font-bold text-sm tracking-tight">Devspirits Premium</p>
+             </div>
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="p-8 space-y-6">
+          {step === 1 && (
+            <>
+              <div className="flex items-baseline justify-between border-b pb-6">
+                <span className="text-sm font-semibold text-gray-500">Amount to pay</span>
+                <span className="text-3xl font-black text-gray-900 tracking-tighter">{amount}</span>
+              </div>
+              <div className="space-y-3">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Select Pay Method</p>
+                <div onClick={() => setStep(2)} className="flex items-center justify-between p-4 bg-gray-50 border rounded-xl hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition-all group">
+                   <div className="flex items-center gap-4">
+                     <div className="h-10 w-10 bg-white rounded-lg border flex items-center justify-center shadow-sm">
+                        <SmartphoneIcon size={20} className="text-blue-600" />
+                     </div>
+                     <span className="font-bold text-gray-700">UPI / GPay / PhonePe</span>
+                   </div>
+                   <ChevronRight size={18} className="text-gray-400 group-hover:translate-x-1 transition-transform" />
+                </div>
+                <div onClick={() => setStep(2)} className="flex items-center justify-between p-4 bg-gray-50 border rounded-xl hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition-all group">
+                   <div className="flex items-center gap-4">
+                     <div className="h-10 w-10 bg-white rounded-lg border flex items-center justify-center shadow-sm">
+                        <CreditCard size={20} className="text-blue-600" />
+                     </div>
+                     <span className="font-bold text-gray-700">Card (Debit/Credit)</span>
+                   </div>
+                   <ChevronRight size={18} className="text-gray-400 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </>
+          )}
+
+          {step === 2 && (
+            <div className="py-12 flex flex-col items-center justify-center space-y-6">
+               <div className="h-16 w-16 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin" />
+               <p className="font-bold text-gray-600 uppercase tracking-widest text-xs">Authenticating Transaction...</p>
+            </div>
+          )}
+
+          {step === 3 && (
+             <div className="py-12 flex flex-col items-center justify-center space-y-6">
+                <motion.div 
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="h-24 w-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-200"
+                >
+                    <CheckCircle2 size={48} className="text-white" />
+                </motion.div>
+                <div className="text-center space-y-2">
+                    <p className="text-2xl font-black text-gray-900 tracking-tight">Payment Success!</p>
+                    <p className="text-sm font-medium text-gray-500">Your premium for the week is confirmed.</p>
+                </div>
+             </div>
+          )}
+        </div>
+
+        <div className="bg-gray-50 p-4 border-t flex items-center justify-center gap-2">
+           <ShieldCheck size={14} className="text-gray-400" />
+           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Secured by Razorpay</p>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+/**
+ * Linker Component (Swiggy/Zomato)
+ */
+function PlatformLinker() {
+  const [linking, setLinking] = useState<string | null>(null);
+  const [otp, setOtp] = useState("");
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const startLinking = (id: string) => {
+    setLinking(id);
+    setOtp("");
+  }
+
+  const handleVerify = () => {
+    setTimeout(() => {
+        setSuccess(linking);
+        setLinking(null);
+        setTimeout(() => setSuccess(null), 3000);
+    }, 1500);
+  }
+
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      {[
+        { id: "swiggy", name: "Swiggy Delivery", color: "bg-[#FC8019]", icon: "/swiggy.png" },
+        { id: "zomato", name: "Zomato Partner", color: "bg-[#CB202D]", icon: "/zomato.png" },
+      ].map((p) => (
+        <div key={p.id} className="glass-card p-8 flex items-center justify-between group overflow-hidden relative">
+          <div className={cn("absolute inset-y-0 left-0 w-2 transition-all group-hover:w-3", p.color)} />
+          <div className="flex items-center gap-6">
+             <div className={cn("h-16 w-16 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-black/5", p.color)}>
+                <span className="text-2xl font-black italic">{p.name[0]}</span>
+             </div>
+             <div>
+                <h4 className="text-xl font-bold tracking-tight">{p.name}</h4>
+                <p className="text-sm font-medium text-muted-foreground">Sync your delivery history</p>
+             </div>
+          </div>
+          
+          <AnimatePresence mode="wait">
+            {success === p.id ? (
+                <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="flex items-center gap-2 text-accent-emerald font-bold uppercase tracking-widest text-xs">
+                    <CircleCheck size={18} /> Linked
+                </motion.div>
+            ) : linking === p.id ? (
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
+                   <input 
+                    type="text" 
+                    placeholder="OTP" 
+                    className="w-20 h-10 bg-muted/40 border-2 border-primary/20 rounded-xl px-3 text-center font-bold tracking-[0.3em]" 
+                    maxLength={4}
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                   />
+                   <Button onClick={handleVerify} className="h-10 px-4 bg-primary text-white rounded-xl font-bold">Verify</Button>
+                </motion.div>
+            ) : (
+                <Button variant="outline" onClick={() => startLinking(p.id)} className="rounded-full border-2 font-bold group-hover:bg-primary group-hover:text-white transition-all">
+                    Link Now
+                </Button>
+            )}
+          </AnimatePresence>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// --- MAIN PAGES ---
 
 export function DashboardPageView() {
+  const [payModal, setPayModal] = useState(false);
+
   return (
     <PageShell
-      eyebrow="Worker dashboard"
-      title="Income protection at a glance"
-      description="Track weekly protected earnings, active risk, coverage hours, and live alerts for your operating zone."
-      actions={<ThemeQuickToggle />}
+      eyebrow="Coverage Center"
+      title="My Parametric Guard"
+      description="Real-time monitoring of your earnings safety. Connect delivery platforms to unlock advanced AI-led income restoration."
+      actions={
+        <div className="flex items-center gap-3">
+           <Button onClick={() => setPayModal(true)} className="btn-premium bg-gradient-ds-mixed text-white border-0 shadow-lg px-6 font-bold">
+            Pay Premium (₹49)
+           </Button>
+        </div>
+      }
     >
+      <RazorpayModal 
+        isOpen={payModal} 
+        onClose={() => setPayModal(false)}
+        onComplete={() => {}}
+        amount="₹49.00"
+      />
+
       <MetricGrid metrics={dashboardMetrics} />
 
-      <div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
-        <SectionCard title="Earnings vs protected earnings" description="Weekly trend across active insured weeks">
+      <div className="grid gap-8 xl:grid-cols-[1.6fr_0.9fr]">
+        <SectionCard title="Earnings Protection Stream" description="Live comparison of actual vs projected income gap.">
           <EarningsAreaChart data={earningsTrend} />
         </SectionCard>
-        <SectionCard title="Weather risk widget" description="Today + next 3 days risk watch">
-          <WeatherCards items={weatherOutlook} />
+        <SectionCard title="Platform Integrity" description="Securely link your worker accounts for automated claim validation.">
+           <PlatformLinker />
+           <div className="mt-8 p-6 bg-muted/30 rounded-3xl border border-dashed border-primary/20">
+             <div className="flex items-start gap-4">
+                <ShieldCheck className="text-primary mt-1" size={24} />
+                <div>
+                   <p className="font-bold text-foreground">Verified Integration</p>
+                   <p className="text-sm font-medium text-muted-foreground leading-relaxed mt-1">
+                     We uses high-level OAuth/SMS hooks to verify delivery activity. We never store your passwords.
+                   </p>
+                </div>
+             </div>
+           </div>
         </SectionCard>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_1.2fr]">
-        <SectionCard title="Live alerts" description="Parametric triggers mapped to your active delivery hours">
+      <div className="grid gap-8 xl:grid-cols-[1fr_1.3fr]">
+        <SectionCard title="Active Trigger Feed" description="Local environmental disruption events currently in watch.">
           <AlertList items={liveAlerts} />
         </SectionCard>
-        <SectionCard title="Operating zone heatmap" description="Hyperlocal delivery zones with live risk intensity">
+        <SectionCard title="Zone Disruption Heatmap" description="Hyperlocal delivery zones with active risk intensity mapping.">
           <ZoneHeatGrid items={zoneRisks} />
         </SectionCard>
       </div>
 
-      <SectionCard title="Quick actions" description="Most-used flows for demo and pitch walkthrough">
+      <SectionCard title="Core Workflows" description="Simulate the parametric lifecycle.">
         <QuickLinks
           items={[
-            { title: "Open policy cover", description: "Review active weekly plan and covered hours", href: "/student/dashboard/projects" },
-            { title: "Inspect AI risk model", description: "See premium inputs and forecast drivers", href: "/student/dashboard/tasks" },
-            { title: "Run trigger simulation", description: "Show auto claim creation and payout flow", href: "/student/dashboard/internships" },
+            { title: "Review Policy", description: "Vew active weekly tiers and limits", href: "/student/dashboard/projects" },
+            { title: "Inspect AI Engine", description: "Premium forecast and impact drivers", href: "/student/dashboard/tasks" },
+            { title: "Run Simulation", description: "Test automated trigger to payout flow", href: "/student/dashboard/internships" },
           ]}
         />
       </SectionCard>
@@ -120,47 +337,34 @@ export function DashboardPageView() {
 export function ProfilePageView() {
   return (
     <PageShell
-      eyebrow="My profile"
+      eyebrow="Identity Management"
       title={workerProfile.name}
-      description="Single-role worker profile built for food delivery partners with weekly protection, payout readiness, and zone-based coverage."
-      actions={<Button className="gap-2 bg-foreground text-background hover:bg-foreground/90 rounded-full shadow-sm"><UserCircle2 className="h-4 w-4" /> Edit profile</Button>}
+      description="Manage your delivery footprint, payout methods, and platform links for Devspirits coverage."
+      actions={<Button className="btn-premium bg-foreground text-white rounded-full font-bold px-6 shadow-xl"><UserCircle2 className="h-4 w-4 mr-2" /> Edit Profile</Button>}
     >
-      <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <SectionCard title="Worker identity" description="Core account and partner details">
+      <div className="grid gap-8 xl:grid-cols-[1.2fr_0.8fr]">
+        <SectionCard title="Worker Blueprint" description="Account details used for zone-based parametric pricing.">
           <div className="grid gap-4 md:grid-cols-2">
-            <ProfileField label="Platform" value={workerProfile.platform} />
-            <ProfileField label="City" value={workerProfile.city} />
-            <ProfileField label="Zone preference" value={workerProfile.zone} />
-            <ProfileField label="Vehicle type" value={workerProfile.vehicle} />
-            <ProfileField label="Work timing" value={workerProfile.workingShift} />
-            <ProfileField label="Preferred payout" value={workerProfile.upiId} />
+            <ProfileField label="Primary Platform" value={workerProfile.platform} />
+            <ProfileField label="City Hub" value={workerProfile.city} />
+            <ProfileField label="Work Zone" value={workerProfile.zone} />
+            <ProfileField label="Vehicle Class" value={workerProfile.vehicle} />
+            <ProfileField label="Shift Slot" value={workerProfile.workingShift} />
+            <ProfileField label="UPI Payout ID" value={workerProfile.upiId} />
           </div>
         </SectionCard>
-        <SectionCard title="Work details" description="Dummy DB-backed profile summary">
+        <SectionCard title="Performance Index" description="Dummy metrics for weekly eligibility.">
           <div className="space-y-4">
-            <ProfileStat label="Avg daily earnings" value={workerProfile.avgDailyEarnings} />
-            <ProfileStat label="Weekly earnings" value={workerProfile.weeklyEarnings} />
-            <ProfileStat label="Trust score" value={workerProfile.trustScore} />
-            <ProfileStat label="Member since" value={workerProfile.memberSince} />
+            <ProfileStat label="Daily Target" value={workerProfile.avgDailyEarnings} />
+            <ProfileStat label="Current Week" value={workerProfile.weeklyEarnings} />
+            <ProfileStat label="Safety Score" value={workerProfile.trustScore} />
+            <ProfileStat label="Active Since" value={workerProfile.memberSince} />
           </div>
         </SectionCard>
       </div>
 
-      <SectionCard title="Edit-ready delivery profile" description="Fields modeled for onboarding, weekly pricing, and payout validation">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {[
-            "Primary app: Swiggy",
-            "Backup app: Zomato",
-            "Preferred shift: 9 AM - 8 PM",
-            "UPI verified for instant payout",
-            "Coverage city: Bengaluru",
-            "Voice assist language: Hindi",
-          ].map((item) => (
-            <div key={item} className="rounded-2xl border border-border/60 bg-muted/40 px-4 py-3.5 text-sm font-medium text-foreground hover:border-foreground/20 transition-colors">
-              {item}
-            </div>
-          ))}
-        </div>
+      <SectionCard title="Active Integrations" description="Linked delivery apps for automated data sync.">
+        <PlatformLinker />
       </SectionCard>
     </PageShell>
   );
@@ -169,34 +373,34 @@ export function ProfilePageView() {
 export function PolicyPageView() {
   return (
     <PageShell
-      eyebrow="My policy"
+      eyebrow="My Contract"
       title={policySummary.planName}
-      description="Weekly pricing aligned to gig-worker cashflow with hours-based income-loss cover only."
+      description="Pure parametric coverage centered around unrecoverable hourly loss. Simple, automated, zero-clutter."
       actions={
         <div className="flex gap-3">
-          <Button variant="outline" className="rounded-full">Pause policy</Button>
-          <Button className="bg-foreground text-background hover:bg-foreground/90 rounded-full shadow-sm">Upgrade plan</Button>
+          <Button variant="outline" className="rounded-full font-bold px-6 border-2">Pause Policy</Button>
+          <Button className="btn-premium bg-gradient-ds-indigo text-white px-6 font-bold shadow-xl border-0">Upgrade Plan</Button>
         </div>
       }
     >
-      <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <SectionCard title="Active policy card" description={`${policySummary.status} • Renewal ${policySummary.renewal}`}>
+      <div className="grid gap-8 xl:grid-cols-[1.2fr_0.8fr]">
+        <SectionCard title="Policy Metadata" description={`${policySummary.status} • Next Renewal ${policySummary.renewal}`}>
           <div className="grid gap-4 md:grid-cols-2">
-            <ProfileStat label="Weekly premium" value={policySummary.weeklyPremium} />
-            <ProfileStat label="Coverage per hour" value={policySummary.coveragePerHour} />
-            <ProfileStat label="Max cover" value={policySummary.maxHours} />
-            <ProfileStat label="Policy ID" value={workerProfile.policyId} />
+            <ProfileStat label="Weekly Premium" value={policySummary.weeklyPremium} />
+            <ProfileStat label="Hourly Indemnity" value={policySummary.coveragePerHour} />
+            <ProfileStat label="Max Recovery" value={policySummary.maxHours} />
+            <ProfileStat label="Contract ID" value={workerProfile.policyId} />
           </div>
         </SectionCard>
-        <SectionCard title="Coverage breakdown" description="Hours covered vs uncovered this cycle">
-          <DonutChart data={coverageMix} colors={["var(--foreground)", "var(--muted)"]} />
+        <SectionCard title="Protection Mix" description="Hours covered in current cycle.">
+          <DonutChart data={coverageMix} colors={["var(--color-primary)", "var(--color-muted)"]} />
         </SectionCard>
       </div>
 
-      <SectionCard title="Weekly plan table" description="Premium, status, and coverage by week">
+      <SectionCard title="Premium History" description="Recent weekly subscriptions and coverage status.">
         <TableBlock
-          columns={["Week", "Premium", "Status", "Coverage"]}
-          rows={weeklyPolicyTable.map((row) => [row.week, row.premium, row.status, row.coverage])}
+          columns={["Week Range", "Premium Paid", "Contract Status", "Protected Hours"]}
+          rows={weeklyPolicyTable.map((row) => [row.week, row.premium, <SimpleBadge value={row.status} tone={row.status === 'Active' ? 'success' : 'primary'} />, row.coverage])}
         />
       </SectionCard>
     </PageShell>
@@ -206,35 +410,35 @@ export function PolicyPageView() {
 export function RiskPremiumPageView() {
   return (
     <PageShell
-      eyebrow="AI core"
-      title="Risk scoring and dynamic premium"
-      description="This module explains why the weekly premium moved and how forecast, zone risk, and disruption frequency affect pricing."
-      actions={<Button className="gap-2 bg-foreground text-background hover:bg-foreground/90 rounded-full shadow-sm"><BrainCircuit className="h-4 w-4" /> Recalculate premium</Button>}
+      eyebrow="Devspirits AI Intelligence"
+      title="Risk-Adaptive Pricing"
+      description="See the transparent variables that shape your weekly premium. Our AI processes thousands of data points to keep protection affordable."
+      actions={<Button className="btn-premium bg-primary text-white rounded-full font-bold px-6 shadow-xl flex items-center gap-2"><BrainCircuit size={18} /> Run Risk Sync</Button>}
     >
-      <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <SectionCard title="Risk score meter" description="Current score based on location, weather, and active delivery hours">
+      <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+        <SectionCard title="Live Zone Risk Index" description="Forecasted disruption probability for your active zone.">
           <GaugeCard value={67} />
         </SectionCard>
-        <SectionCard title="Feature impact chart" description="Key variables influencing this week's premium">
+        <SectionCard title="Premium Variable Impact" description="How specific factors influenced your ₹49 premium.">
           <ComparisonBarChart
             data={premiumFactors.map((factor) => ({ label: factor.name, impact: factor.value }))}
-            bars={[{ key: "impact", color: "var(--foreground)", name: "Impact" }]}
+            bars={[{ key: "impact", color: "var(--color-accent-violet)", name: "Impact Score" }]}
           />
         </SectionCard>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <SectionCard title="Historical risk trend" description="AI risk over recent trigger windows">
-          <RiskLineChart data={earningsTrend} lines={[{ key: "risk", color: "#f59e0b", name: "Risk score" }]} />
+      <div className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
+        <SectionCard title="Historical Risk Fluctuations" description="AI risk volatility through recent delivery shifts.">
+          <RiskLineChart data={earningsTrend} lines={[{ key: "risk", color: "var(--color-accent-violet)", name: "Risk Index" }]} />
         </SectionCard>
-        <SectionCard title="AI explanation" description="Why the weekly premium is set at ₹49">
-          <div className="rounded-2xl border border-foreground/10 bg-muted/50 p-5 text-sm font-medium leading-relaxed text-foreground shadow-sm">
-            Premium increased due to expected rainfall in HSR Layout, elevated pollution in adjacent corridors, and a recent disruption streak across the zone.
+        <SectionCard title="Predictive AI Explanation" description="Dynamic logic output for current pricing cycle.">
+          <div className="rounded-[2rem] border-2 border-primary/20 bg-primary/5 p-8 text-lg font-bold leading-relaxed text-foreground italic">
+            "Your premium increased slightly (+₹4) due to high-conviction rainfall forecasts in HSR Layout and elevated traffic congestion indices in adjacent corridors."
           </div>
-          <div className="mt-4 space-y-3">
+          <div className="mt-8 space-y-4">
             {premiumExplainer.map((item) => (
-              <div key={item} className="rounded-2xl border border-border/60 bg-card p-4 text-sm text-muted-foreground hover:border-foreground/20 transition-colors">
-                {item}
+              <div key={item} className="rounded-2xl border border-border/40 bg-muted/20 p-5 font-semibold text-muted-foreground hover:bg-muted/40 transition-all flex items-center gap-4">
+                <div className="h-2 w-2 rounded-full bg-primary" /> {item}
               </div>
             ))}
           </div>
@@ -246,18 +450,18 @@ export function RiskPremiumPageView() {
 
 function ProfileField({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-border/60 bg-muted/20 p-4 hover:bg-muted/40 transition-colors">
-      <p className="text-sm font-medium text-muted-foreground">{label}</p>
-      <p className="mt-1 font-semibold text-foreground tracking-tight">{value}</p>
+    <div className="rounded-3xl border border-border/40 bg-muted/20 p-6 hover:bg-muted/40 transition-all">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">{label}</p>
+      <p className="mt-1.5 font-black text-foreground tracking-tight text-lg">{value}</p>
     </div>
   );
 }
 
 function ProfileStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm hover:border-foreground/20 transition-all">
-      <p className="text-sm font-medium text-muted-foreground">{label}</p>
-      <p className="mt-1.5 text-2xl font-semibold tracking-tight text-foreground">{value}</p>
+    <div className="rounded-[2rem] border border-border/40 bg-card p-6 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.1)] hover:border-primary/20 transition-all">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">{label}</p>
+      <p className="mt-2 text-3xl font-black tracking-tighter text-foreground">{value}</p>
     </div>
   );
 }
@@ -265,45 +469,47 @@ function ProfileStat({ label, value }: { label: string; value: string }) {
 export function LiveTriggersPageView() {
   return (
     <PageShell
-      eyebrow="Parametric engine"
-      title="Live trigger monitoring"
-      description="Monitor weather, AQI, flood, and closure conditions that can automatically initiate claims for income loss."
-      actions={<Button className="gap-2 bg-foreground text-background hover:bg-foreground/90 rounded-full shadow-sm"><PlayCircle className="h-4 w-4" /> Run manual trigger</Button>}
+      eyebrow="Parametric Oracle"
+      title="Live Trigger Stream"
+      description="Our system monitors thousands of environmental data points across India. Triggers crossing your zone threshold initiate payouts."
+      actions={<Button className="btn-premium bg-foreground text-white rounded-full font-bold px-6 shadow-xl flex items-center gap-2"><PlayCircle size={18} /> Simulate Event</Button>}
     >
-      <div className="grid gap-4 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-3">
         {triggerFeed.map((item) => {
           const Icon = item.icon;
           return (
-            <SectionCard key={item.id} title={item.name} description={`${item.location} • ${item.source}`}>
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-border/50 bg-muted text-foreground shadow-sm">
-                  <Icon className="h-5 w-5" />
+            <SectionCard key={item.id} title={item.name} description={`${item.location} • Source: ${item.source}`} className="hover:scale-[1.02] transition-transform">
+              <div className="flex items-start justify-between gap-3 mb-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-ds-indigo text-white shadow-xl shadow-primary/20">
+                  <Icon className="h-6 w-6" />
                 </div>
                 <div className="flex gap-2">
                   <SimpleBadge value={item.status} tone={item.status === "Active" ? "danger" : item.status === "Watch" ? "warning" : "success"} />
                   <SimpleBadge value={item.severity} tone={item.severity === "High" ? "danger" : item.severity === "Medium" ? "warning" : "success"} />
                 </div>
               </div>
-              <div className="mt-5 space-y-2 text-sm font-medium text-muted-foreground">
-                <p className="text-foreground/90">{item.condition}</p>
-                <p>{item.payoutImpact}</p>
+              <div className="space-y-3">
+                <p className="text-lg font-black tracking-tight text-foreground">{item.condition}</p>
+                <div className="p-4 bg-muted/30 rounded-2xl border border-dashed border-primary/20 text-xs font-bold text-muted-foreground leading-relaxed uppercase tracking-widest italic">
+                  Impact: {item.payoutImpact}
+                </div>
               </div>
             </SectionCard>
           );
         })}
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <SectionCard title="Trigger timeline" description="Risk curve through the day">
-          <RiskLineChart data={triggerTimeline} lines={[{ key: "risk", color: "var(--foreground)", name: "Trigger risk" }]} />
+      <div className="grid gap-8 xl:grid-cols-[1.5fr_1fr]">
+        <SectionCard title="Oracular Risk Projection" description="Live risk curve mapped through the day.">
+          <RiskLineChart data={triggerTimeline} lines={[{ key: "risk", color: "var(--color-primary)", name: "Trigger Probability" }]} />
         </SectionCard>
-        <SectionCard title="API status panel" description="All integrations are mocked or sandboxed for demo">
+        <SectionCard title="Telemetry Health" description="Status of parametric data providers.">
           <div className="space-y-3">
             {apiStatus.map((item) => (
-              <div key={item.name} className="flex items-center justify-between rounded-2xl border border-border/60 bg-card p-4 hover:bg-muted/30 transition-colors">
+              <div key={item.name} className="flex items-center justify-between rounded-2xl border border-border/40 bg-card p-5 hover:bg-muted/30 transition-all group">
                 <div>
-                  <p className="font-semibold text-foreground">{item.name}</p>
-                  <p className="text-sm font-mono text-muted-foreground mt-0.5">{item.latency}</p>
+                  <p className="font-bold text-foreground group-hover:text-primary transition-colors">{item.name}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mt-1">{item.latency} ms latency</p>
                 </div>
                 <SimpleBadge value={item.status} tone="success" />
               </div>
@@ -318,35 +524,48 @@ export function LiveTriggersPageView() {
 export function ClaimsPageView() {
   return (
     <PageShell
-      eyebrow="Zero-touch claims"
-      title="Claims automation"
-      description="A disruption trigger flows through validation, auto approval, and payout initiation with fraud scoring and location checks."
-      actions={<Button className="bg-foreground text-background hover:bg-foreground/90 rounded-full shadow-sm">Raise manual claim</Button>}
+      eyebrow="Zero-Touch Restoration"
+      title="Automated Payout Logs"
+      description="Experience insurance without claims. Payouts are approved the moment our AI validates the zone disruption."
+      actions={<Button className="btn-premium bg-foreground text-white px-6 font-bold rounded-full">Raise Manual Inquiry</Button>}
     >
-      <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <SectionCard title="Claims table" description="Recent automated claims from disruption events">
+      <div className="grid gap-8 xl:grid-cols-[1.4fr_0.6fr]">
+        <SectionCard title="Recovery Ledger" description="Successful automated payouts from disruption events.">
           <TableBlock
-            columns={["Date", "Trigger", "Hours lost", "Amount", "Status", "Confidence"]}
-            rows={claimsTable.map((row) => [row.date, row.trigger, row.hoursLost, row.amount, row.status, row.confidence])}
+            columns={["Event Date", "Disruption", "Hours Gap", "Net Recovery", "Status", "AI Conf"]}
+            rows={claimsTable.map((row) => [
+                row.date, 
+                row.trigger, 
+                row.hoursLost, 
+                <span className="font-bold text-accent-emerald">{row.amount}</span>, 
+                <SimpleBadge value={row.status} tone="success" />, 
+                <span className="text-xs font-bold font-mono py-1 px-2 bg-muted/60 rounded-lg">{row.confidence}</span>
+            ])}
           />
         </SectionCard>
-        <SectionCard title="Claim workflow" description="Trigger → AI validation → approval → payout">
-          <div className="space-y-4">
+        <SectionCard title="Validation Engine" description="How our AI verifies each event.">
+          <div className="space-y-6">
             {[
-              "Real-time trigger matched against covered worker zone.",
-              "Delivery activity in the pre-event window is validated.",
-              "Fraud confidence score stays below auto-block threshold.",
-              "Claim is approved instantly and payout moves to sandbox rail.",
+              "Hyperlocal weather match with worker zone GPS.",
+              "Cross-verification of linked Swiggy/Zomato downtime.",
+              "Anomaly check for location spoofing patterns.",
+              "Instant Approval and secure UPI ledger transmit.",
             ].map((step, i) => (
-              <div key={step} className="flex items-start gap-4 rounded-2xl border border-border/60 bg-card p-4 hover:border-foreground/20 transition-all">
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold text-foreground">
+              <div key={step} className="flex gap-4 group">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary font-black text-sm group-hover:bg-primary group-hover:text-white transition-all">
                   {i + 1}
                 </div>
-                <p className="text-sm font-medium text-muted-foreground pt-0.5">{step}</p>
+                <p className="text-sm font-bold text-muted-foreground leading-relaxed group-hover:text-foreground transition-all">{step}</p>
               </div>
             ))}
-            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-5 text-sm font-medium leading-relaxed text-emerald-700 dark:text-emerald-400">
-              <span className="font-bold">System log:</span> Claim auto-approved with 96% confidence because worker activity and zone disruption matched the parametric rule.
+            <div className="rounded-[2rem] bg-gradient-ds-emerald p-8 text-white shadow-xl shadow-accent-emerald/20">
+               <div className="flex items-center gap-3 mb-4">
+                  <ShieldCheck size={24} />
+                  <p className="font-black tracking-tight text-xl uppercase italic">Approval Success</p>
+               </div>
+               <p className="text-sm font-semibold opacity-90 leading-loose">
+                  "Auto-approved payout of ₹320. Rider activity was confirmed active 30 mins prior to the Zomato Zone lockout trigger."
+               </p>
             </div>
           </div>
         </SectionCard>
@@ -358,106 +577,59 @@ export function ClaimsPageView() {
 export function PayoutsPageView() {
   return (
     <PageShell
-      eyebrow="Recovered earnings"
-      title="Instant payout simulation"
-      description="Show how income loss is recovered through weekly payouts into UPI after AI approval."
-      actions={<Button className="gap-2 bg-foreground text-background hover:bg-foreground/90 rounded-full shadow-sm"><WalletCards className="h-4 w-4" /> Retry payout simulation</Button>}
+      eyebrow="Financial Recovery"
+      title="Instant UPI Transmission"
+      description="Direct recovery of daily income into your UPI wallet. Real-time credits driven by environmental data."
+      actions={<Button className="btn-premium bg-primary text-white font-bold rounded-full px-6 shadow-xl flex items-center gap-2"><WalletCards size={18} /> Sync Wallet</Button>}
     >
-      <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
-        <SectionCard title="Recovered earnings" description="Weekly payout trend">
+      <div className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
+        <SectionCard title="Aggregated Recovery" description="Total income restored via Devspirits.">
           <MetricGrid
             metrics={[
               {
-                title: "Total earnings recovered",
+                title: "Income Recovered",
                 value: "₹1,240",
-                change: "Across 4 automated payouts",
+                change: "Across 4 Auto-Claims",
                 tone: "success",
                 icon: BadgeIndianRupee,
               },
               {
-                title: "Fastest payout",
-                value: "43 sec",
-                change: "Trigger to sandbox transfer",
+                title: "Transmission Speed",
+                value: "43s",
+                change: "Avg. Trigger to Credit",
                 tone: "primary",
                 icon: Zap,
               },
             ]}
           />
-          <div className="mt-6">
-            <ComparisonBarChart data={payoutTimeline} bars={[{ key: "payout", color: "#22c55e", name: "Payout" }]} />
+          <div className="mt-10 h-72">
+             <ComparisonBarChart data={payoutTimeline} bars={[{ key: "payout", color: "var(--color-accent-emerald)", name: "Restored Amount" }]} />
           </div>
         </SectionCard>
-        <SectionCard title="Instant credit demo" description="UPI sandbox payout event">
-          <div className="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-emerald-500/5 p-8 shadow-sm">
-            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-emerald-500/10 blur-2xl" />
-            <p className="text-sm font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Latest simulated payout</p>
-            <h3 className="mt-2 text-5xl font-bold tracking-tight text-foreground">₹320 credited</h3>
-            <p className="mt-3 text-sm font-medium text-muted-foreground">Transferred via UPI to <span className="font-semibold text-foreground">{workerProfile.upiId}</span></p>
+        <SectionCard title="Live Credit Sandbox" description="Latest simulated transmission event.">
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-ds-mixed p-10 text-white shadow-[0_40px_80px_-20px_rgba(var(--color-primary),0.3)]">
+            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-[80px]" />
+            <div className="flex items-center justify-between mb-8 opacity-60">
+                 <p className="text-[10px] font-black uppercase tracking-widest">Devspirits Payout Rail</p>
+                 <Zap size={20} />
+            </div>
+            <h3 className="text-5xl font-black tracking-tighter">₹320.00</h3>
+            <p className="mt-4 font-bold tracking-tight text-white/80">Transferred via GPay to <br /> <span className="text-white text-lg">{workerProfile.upiId}</span></p>
+            
+            <div className="mt-12 pt-8 border-t border-white/10 flex items-center justify-between font-mono text-[10px] font-bold uppercase tracking-widest opacity-60">
+                 <span>Ref: #DS-RECOVER-4921</span>
+                 <span>Conf: 99.1%</span>
+            </div>
           </div>
-          <div className="mt-6 space-y-3">
-            {payoutTransactions.slice(0, 2).map((item) => (
-              <div key={item.reference} className="rounded-2xl border border-border/60 bg-card p-4 hover:bg-muted/30 transition-colors">
-                <div className="flex items-center justify-between">
-                  <p className="font-semibold text-foreground">{item.amount}</p>
-                  <SimpleBadge value={item.status} tone="success" />
+          <div className="mt-8 space-y-4">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 px-2 leading-tight mb-2">Recent transmissions</p>
+            {payoutTransactions.slice(0, 3).map((item) => (
+              <div key={item.reference} className="glass-card p-5 group flex items-center justify-between hover:bg-muted/30 transition-all">
+                <div className="space-y-1">
+                  <p className="font-black text-foreground text-lg tracking-tight">{item.amount}</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{item.date} • {item.method}</p>
                 </div>
-                <p className="mt-1 text-sm font-medium text-muted-foreground">{item.date} • {item.method}</p>
-              </div>
-            ))}
-          </div>
-        </SectionCard>
-      </div>
-
-      <SectionCard title="Transaction table" description="Dummy payout history connected to mock data">
-        <TableBlock
-          columns={["Date", "Amount", "Method", "Status", "Reference"]}
-          rows={payoutTransactions.map((row) => [row.date, row.amount, row.method, row.status, row.reference])}
-        />
-      </SectionCard>
-    </PageShell>
-  );
-}
-
-export function FraudMonitorPageView() {
-  return (
-    <PageShell
-      eyebrow="Fraud monitor"
-      title="AI anomaly detection"
-      description="Advanced fraud controls for GPS spoofing, duplicate claims, and missing pre-event activity."
-      actions={<Button className="gap-2 bg-foreground text-background hover:bg-foreground/90 rounded-full shadow-sm"><ShieldAlert className="h-4 w-4" /> Run anomaly scan</Button>}
-    >
-      <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
-        <SectionCard title="Fraud alerts table" description="High-priority cases requiring review">
-          <TableBlock
-            columns={["User", "Issue", "Confidence", "Status", "Zone"]}
-            rows={fraudAlerts.map((row) => [row.user, row.issue, row.confidence, row.status, row.zone])}
-          />
-        </SectionCard>
-        <SectionCard title="Anomaly trend" description="Normal activity vs suspicious spikes">
-          <ComparisonBarChart
-            data={fraudTrend}
-            bars={[
-              { key: "normal", color: "var(--foreground)", name: "Normal" },
-              { key: "anomalies", color: "#ef4444", name: "Anomalies" },
-            ]}
-          />
-        </SectionCard>
-      </div>
-
-      <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
-        <SectionCard title="Suspicious zone map" description="Mock zone cards replacing GPS heatmap for demo">
-          <ZoneHeatGrid items={zoneRisks.slice(0, 3)} />
-        </SectionCard>
-        <SectionCard title="AI model output" description="Key fraud controls enabled for demo">
-          <div className="space-y-3">
-            {[
-              "Duplicate claim detection checks the same worker, zone, and trigger timestamp window.",
-              "GPS spoofing is flagged by cross-validating location and platform activity patterns.",
-              "Workers without pre-event delivery activity are pushed into manual review.",
-              "Circuit-breaker logic can pause high-volume anomalies before payout release.",
-            ].map((item) => (
-              <div key={item} className="rounded-2xl border border-border/60 bg-muted/40 p-4 text-sm font-medium text-muted-foreground hover:border-foreground/20 transition-all">
-                {item}
+                <SimpleBadge value={item.status} tone="success" />
               </div>
             ))}
           </div>
@@ -470,44 +642,44 @@ export function FraudMonitorPageView() {
 export function AnalyticsPageView() {
   return (
     <PageShell
-      eyebrow="Portfolio analytics"
-      title="Business and disruption analytics"
-      description="Relevant insurer and product metrics, next-week forecasting, claims ratios, and premium performance."
-      actions={<Button className="bg-foreground text-background hover:bg-foreground/90 rounded-full shadow-sm">Export demo summary</Button>}
+      eyebrow="Strategic Insights"
+      title="Portfolio & Disruption Intelligence"
+      description="Comprehensive data on zone risk trends, payout ratios, and predictive weather impact mapping for next cycle."
+      actions={<Button className="btn-premium bg-foreground text-white rounded-full font-bold px-6 shadow-xl">Export Summary</Button>}
     >
       <MetricGrid metrics={analyticsKpis} />
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
-        <SectionCard title="Claims vs weather events" description="Correlation of disruption volume and claims">
+      <div className="grid gap-8 xl:grid-cols-[1fr_1fr]">
+        <SectionCard title="Incident Correlation" description="Mapping disrupted hours against actual automated payouts.">
           <ComparisonBarChart
             data={claimsVsWeather}
             bars={[
-              { key: "weather", color: "var(--muted-foreground)", name: "Weather events" },
-              { key: "claims", color: "var(--foreground)", name: "Claims" },
+              { key: "weather", color: "var(--color-muted)", name: "Trigger Events" },
+              { key: "claims", color: "var(--color-primary)", name: "Payouts Issued" },
             ]}
           />
         </SectionCard>
-        <SectionCard title="Revenue vs payouts" description="Weekly pricing viability view">
+        <SectionCard title="Solvency Rail" description="Contract revenue vs recovery transmission volume.">
           <ComparisonBarChart
             data={revenueVsPayout}
             bars={[
-              { key: "revenue", color: "var(--foreground)", name: "Revenue" },
-              { key: "payout", color: "var(--border)", name: "Payout" },
+              { key: "revenue", color: "var(--color-accent-violet)", name: "Premium Revenue" },
+              { key: "payout", color: "var(--color-accent-emerald)", name: "Recovered Income" },
             ]}
           />
         </SectionCard>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <SectionCard title="Risk distribution" description="Policy base by risk tier">
-          <DonutChart data={riskDistribution} colors={["var(--foreground)", "var(--muted)", "var(--border)"]} />
+      <div className="grid gap-8 xl:grid-cols-[0.8fr_1.2fr]">
+        <SectionCard title="Portfolio Risk Curve" description="Worker distribution across AI-determined risk tiers.">
+          <DonutChart data={riskDistribution} colors={["var(--color-primary)", "var(--color-accent-violet)", "var(--color-accent-emerald)"]} />
         </SectionCard>
-        <SectionCard title="Next week forecast" description="Predictive outlook for the upcoming cycle">
+        <SectionCard title="Next Shift Outlook" description="Predictive risk indices for the upcoming delivery cycle.">
           <div className="grid gap-4 md:grid-cols-2">
-            <ForecastTile icon={CloudRain} label="Rain risk" value="72%" />
-            <ForecastTile icon={Waves} label="Flood watch" value="31%" />
-            <ForecastTile icon={BellRing} label="Zone closure probability" value="18%" />
-            <ForecastTile icon={MapPinned} label="Highest risk zone" value="HSR Layout" />
+            <ForecastTile icon={CloudRain} label="Rain Probability" value="72%" />
+            <ForecastTile icon={Waves} label="Flood Potential" value="31%" />
+            <ForecastTile icon={BellRing} label="Closure Risk" value="18%" />
+            <ForecastTile icon={MapPinned} label="Watch Zone" value="HSR Layout" />
           </div>
         </SectionCard>
       </div>
@@ -518,305 +690,237 @@ export function AnalyticsPageView() {
 export function SettingsPageView() {
   return (
     <PageShell
-      eyebrow="Settings"
-      title="Preferences and demo configuration"
-      description="Theme toggle, payment setup, language selection, and mock API configuration for the hackathon demo."
+      eyebrow="Configuration"
+      title="Platform Controls"
+      description="Manage your theme, language, and sandbox variables for the Devspirits demo environment."
       actions={<ThemeQuickToggle />}
     >
-      <div className="grid gap-6 xl:grid-cols-3">
-        <SectionCard title="Profile shortcuts" description="Quick access to worker-facing controls">
+      <div className="grid gap-8 xl:grid-cols-3">
+        <SectionCard title="Workspace Links" description="Quick jumps for demo navigation.">
           <QuickLinks
             items={[
-              { title: "Profile", description: "Update worker and payout details", href: "/student/dashboard/profile" },
-              { title: "Policy", description: "Review plan and hours covered", href: "/student/dashboard/projects" },
-              { title: "Analytics", description: "Open portfolio dashboard", href: "/student/dashboard/notifications" },
+              { title: "My Profile", description: "Worker and payout setup", href: "/student/dashboard/profile" },
+              { title: "Contracts", description: "Active parametric plans", href: "/student/dashboard/projects" },
+              { title: "Disruptions", description: "Live trigger streams", href: "/student/dashboard/notifications" },
             ]}
           />
         </SectionCard>
-        <SectionCard title="Theme and accessibility" description="Responsive UI configuration">
-          <div className="space-y-3">
-            <SettingRow icon={Smartphone} label="Responsive layout" value="Optimized for mobile + desktop" />
-            <SettingRow icon={Languages} label="Language" value={workerProfile.language} />
-            <SettingRow icon={CreditCard} label="Payout default" value={workerProfile.upiId} />
+        <SectionCard title="Personalization" description="Interface and account defaults.">
+          <div className="space-y-4">
+            <SettingRow icon={Smartphone} label="Optimized for" value="Desktop + PWA" />
+            <SettingRow icon={Languages} label="Selected Locale" value={workerProfile.language} />
+            <SettingRow icon={CreditCard} label="Payment Default" value={workerProfile.upiId} />
           </div>
         </SectionCard>
-        <SectionCard title="Demo flow shortcuts" description="Best actions for walkthrough video">
-          <div className="space-y-3">
+        <SectionCard title="Demo Logic Quick Jumps" description="Best flows for hackathon judging.">
+          <div className="space-y-4">
             {quickActions.map((item) => (
-              <div key={item.title} className="rounded-2xl border border-border/60 bg-card p-4 hover:border-foreground/20 transition-all">
-                <p className="font-semibold text-foreground">{item.title}</p>
-                <p className="mt-1 text-sm font-medium text-muted-foreground">{item.description}</p>
+              <div key={item.title} className="rounded-2xl border border-border/40 bg-muted/20 p-5 group hover:border-primary/40 transition-all cursor-pointer">
+                <p className="font-bold text-foreground group-hover:text-primary transition-colors">{item.title}</p>
+                <p className="mt-1 text-sm font-medium text-muted-foreground leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
         </SectionCard>
-      </div>
-
-      <div className="grid gap-6 xl:grid-cols-3">
-        {settingsGroups.map((group) => (
-          <SectionCard key={group.title} title={group.title}>
-            <div className="space-y-3">
-              {group.items.map((item) => (
-                <div key={item.label} className="rounded-2xl border border-border/60 bg-muted/30 p-4 hover:bg-muted/50 transition-colors">
-                  <p className="text-sm font-medium text-muted-foreground">{item.label}</p>
-                  <p className="mt-1 font-semibold text-foreground">{item.value}</p>
-                </div>
-              ))}
-            </div>
-          </SectionCard>
-        ))}
       </div>
     </PageShell>
   );
 }
 
-export function LandingPageView() {
-  return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-foreground/20 selection:text-foreground">
-      <header className="sticky top-0 z-50 border-b border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
-        <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-6">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="font-semibold tracking-tight text-lg flex items-center gap-2">
-              {appIdentity.name}
-            </Link>
-            <div className="hidden h-4 w-px bg-border sm:block" />
-            <span className="hidden text-sm font-medium text-muted-foreground sm:block">
-              Gig Economy Defense
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <ThemeQuickToggle />
-            <Link href="/auth/access">
-              <Button className="h-9 rounded-full bg-foreground text-background hover:bg-foreground/90 px-5 text-sm font-medium shadow-sm transition-transform hover:scale-105 active:scale-95">
-                Sign in
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      <main>
-        <section className="relative overflow-hidden pt-12 pb-24 md:pt-20 md:pb-32">
-          <div className="absolute right-0 top-0 -z-10 h-[400px] w-[400px] -translate-y-1/4 translate-x-1/4 rounded-full bg-foreground/5 blur-[100px] md:h-[600px] md:w-[600px]" />
-          <div className="mx-auto grid max-w-screen-xl gap-16 px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-            <div className="relative z-10 space-y-8">
-              <motion.span initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="inline-flex rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground bg-muted/30 backdrop-blur-sm">
-                AI-powered parametric insurance
-              </motion.span>
-              <motion.h1 initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }} className="bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-5xl font-semibold tracking-tight text-transparent md:text-6xl lg:text-[4.5rem] lg:leading-[1.05]">
-                Weekly income protection for delivery partners.
-              </motion.h1>
-              <motion.p initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }} className="max-w-2xl text-lg font-medium leading-relaxed text-muted-foreground">
-                GigShield AI helps delivery riders recover lost earnings from heavy rain, AQI spikes, floods, and sudden zone closures with automated triggers and instant payouts.
-              </motion.p>
-              <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24 }} className="flex flex-col sm:flex-row gap-4">
-                <Link href="/auth/access" className="w-full sm:w-auto">
-                  <Button className="h-12 w-full sm:w-auto rounded-full bg-foreground px-8 text-base font-medium text-background shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all">
-                    Launch demo
-                  </Button>
-                </Link>
-                <Link href="/student/dashboard" className="w-full sm:w-auto">
-                  <Button variant="outline" className="h-12 w-full sm:w-auto rounded-full border-border px-8 text-base font-medium hover:bg-muted/50 transition-all">
-                    Open dashboard
-                  </Button>
-                </Link>
-              </motion.div>
-              <div className="pt-8 border-t border-border/60 grid grid-cols-2 sm:grid-cols-3 gap-6 max-w-lg">
-                {heroStats.map((item, index) => (
-                  <motion.div key={item.label} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + index * 0.06 }} className="space-y-1.5">
-                    <p className="text-2xl font-semibold tracking-tight">{item.value}</p>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{item.label}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="perspective-1000 relative mx-auto w-full max-w-md lg:ml-auto">
-              <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-tr from-foreground/10 to-transparent blur-2xl" />
-              <div className="relative overflow-hidden rounded-3xl border border-border/80 bg-card/80 shadow-2xl backdrop-blur-xl transition-transform duration-500 hover:scale-[1.02]">
-                <div className="flex items-start justify-between border-b border-border/50 bg-muted/30 p-6">
-                  <div>
-                    <div className="mb-3 flex items-center gap-2">
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500"></span>
-                      </span>
-                      <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Coverage active</span>
-                    </div>
-                    <h2 className="text-xl font-semibold tracking-tight">{workerProfile.name}</h2>
-                    <p className="mt-1 font-mono text-sm text-muted-foreground">ID: {workerProfile.policyId}</p>
-                  </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border/50 bg-background shadow-sm">
-                    <UserCircle2 className="h-6 w-6 text-foreground" />
-                  </div>
-                </div>
-                <div className="space-y-5 p-6">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-muted-foreground">Zone Profile</span>
-                    <span className="rounded-lg bg-muted px-3 py-1 font-semibold">{workerProfile.zone}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-muted-foreground">Weekly Premium</span>
-                    <span className="font-semibold text-foreground">{policySummary.weeklyPremium}</span>
-                  </div>
-                </div>
-                <div className="bg-foreground p-6 text-background">
-                  <p className="mb-4 text-xs font-bold uppercase tracking-wider text-background/50">Active Telemetry</p>
-                  <div className="space-y-4">
-                    {riskSignals.slice(0, 3).map((signal) => {
-                      const Icon = signal.icon;
-                      return (
-                        <div key={signal.label} className="flex items-center gap-3">
-                          <div className="rounded-lg bg-background/10 p-2">
-                            <Icon className="h-4 w-4 text-background/90" />
-                          </div>
-                          <p className="flex-1 text-sm font-semibold">{signal.label}</p>
-                          <p className="font-mono text-sm text-background/70">{signal.value}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        <section className="border-y border-border/50 bg-gradient-to-b from-muted/10 to-transparent py-24">
-          <div className="mx-auto max-w-screen-xl px-6">
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-              {landingHighlights.map((item, index) => {
-                const Icon = item.icon;
-                return (
-                  <motion.div key={item.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05 }} className="group rounded-[2rem] border border-border/60 bg-card p-8 hover:border-foreground/20 hover:shadow-lg transition-all duration-300">
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-muted border border-border/50 group-hover:scale-110 transition-transform duration-300">
-                      <Icon className="h-5 w-5 text-foreground" />
-                    </div>
-                    <h3 className="mt-6 text-xl font-semibold tracking-tight">{item.title}</h3>
-                    <p className="mt-3 text-base font-medium leading-relaxed text-muted-foreground">{item.description}</p>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-  );
-}
-
 export function SignInPageView() {
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setTimeout(() => {
+        setIsLoading(false);
+        window.location.href = "/student/dashboard";
+    }, 1500);
+  };
+
+  if (!mounted) return null;
+
   return (
-    <div className="grid min-h-[100dvh] bg-background lg:grid-cols-2 selection:bg-foreground/20 selection:text-foreground">
-      {/* Sleek Dark Left Panel */}
-      <div className="relative hidden flex-col justify-between overflow-hidden bg-zinc-950 p-12 text-zinc-50 lg:flex">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.05),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.03),transparent_40%)]" />
-        <div className="relative z-10">
-          <Link href="/" className="inline-flex items-center gap-2 text-xl font-semibold tracking-tight">
-            {appIdentity.name}
-          </Link>
-          <p className="mt-1 text-sm font-medium text-zinc-400">{appIdentity.tagline}</p>
-        </div>
+    <div className="min-h-screen bg-background flex flex-col lg:flex-row overflow-hidden">
+      {/* Design-rich Side Paneled Visual */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-[#1D212F] items-center justify-center p-12 overflow-hidden">
+        {/* Abstract shapes / gradients for that "Wow" factor */}
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent-violet/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
         
-        <div className="relative z-10 max-w-md space-y-10">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-zinc-500">Demo scenario</p>
-            <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight">
-              Protect riders from unrecoverable income loss.
-            </h1>
-          </div>
-          <div className="grid gap-4">
-            {[
-              "Weekly pricing aligned with rider earnings cycle",
-              "AI-led premium explanation and fraud validation",
-              "Automatic claim initiation and instant UPI payout",
-            ].map((item, i) => (
-              <div key={item} className="flex items-center gap-4 rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4 text-sm font-medium text-zinc-300 backdrop-blur-sm">
-                 <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-800 text-xs font-bold text-zinc-300">
-                  {i + 1}
-                </div>
-                {item}
-              </div>
-            ))}
-          </div>
+        <div className="z-10 max-w-lg space-y-12">
+            <motion.div 
+               initial={{ opacity: 0, scale: 0.8 }}
+               animate={{ opacity: 1, scale: 1 }}
+               className="h-20 w-20 bg-gradient-ds-mixed rounded-3xl flex items-center justify-center shadow-2xl shadow-primary/40"
+            >
+               <ShieldCheck size={40} className="text-white" />
+            </motion.div>
+            
+            <div className="space-y-6">
+                <motion.h1 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-6xl font-black text-white leading-[0.95] tracking-tighter"
+                >
+                    Guardian <br /><span className="text-primary italic">of the</span> Gig.
+                </motion.h1>
+                <motion.p 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="text-xl font-medium text-white/50 leading-relaxed italic"
+                >
+                    "Experience insurance that doesn't wait for your claim—it acts the moment the weather shifts."
+                </motion.p>
+            </div>
+
+            <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="grid grid-cols-2 gap-8 pt-12 border-t border-white/10"
+            >
+               <div className="space-y-1">
+                  <p className="text-3xl font-black text-white tracking-tighter">4.8s</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">Avg Payout Speed</p>
+               </div>
+               <div className="space-y-1">
+                  <p className="text-3xl font-black text-white tracking-tighter">10K+</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">Active Guards</p>
+               </div>
+            </motion.div>
         </div>
       </div>
 
-      {/* Pristine Right Panel */}
-      <div className="flex items-center justify-center px-6 py-12 md:px-12">
-        <div className="w-full max-w-sm space-y-8">
-          <div>
-            <span className="inline-flex rounded-full border border-border px-3 py-1 text-xs font-bold uppercase tracking-wider text-muted-foreground bg-muted/30">
-              Sample Sign In
-            </span>
-            <h2 className="mt-6 text-3xl font-semibold tracking-tight text-foreground">Welcome back.</h2>
-            <p className="mt-2 text-base font-medium text-muted-foreground">
-              This demo login leads directly into the single-role GigShield AI workspace.
-            </p>
+      {/* Modern, Premium Auth Form Section */}
+      <div className="flex-1 flex items-center justify-center p-8 lg:p-24 relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[80px] pointer-events-none" />
+        
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full max-w-md space-y-10 z-10"
+        >
+          <div className="space-y-3">
+             <h2 className="text-4xl font-black tracking-tight text-foreground">Welcome Back.</h2>
+             <p className="text-muted-foreground font-medium italic">Secure your income in seconds.</p>
           </div>
 
-          <div className="space-y-5">
-            <InputShell label="Phone number or email" value="raju.partner@demo.in" />
-            <InputShell label="Password" value="••••••••••••" />
+          <form onSubmit={handleLogin} className="space-y-6">
+             <div className="space-y-4">
+               <div className="space-y-2 group">
+                 <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground transition-colors group-focus-within:text-primary pl-1">
+                   Phone or Email
+                 </label>
+                 <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 transition-colors group-focus-within:text-primary" size={18} />
+                    <input 
+                      type="text" 
+                      placeholder="e.g. +91 9988776655"
+                      required
+                      suppressHydrationWarning
+                      className="w-full h-16 bg-muted/40 border-2 border-transparent rounded-[1.5rem] pl-12 pr-6 font-bold focus:bg-background focus:border-primary/20 transition-all outline-none"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                 </div>
+               </div>
+
+               <div className="space-y-2 group">
+                 <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground transition-colors group-focus-within:text-primary pl-1">
+                    Verification
+                 </label>
+                 <div className="relative">
+                    <Fingerprint className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 transition-colors group-focus-within:text-primary" size={18} />
+                    <input 
+                      type="password" 
+                      placeholder="Demo PIN (any)"
+                      suppressHydrationWarning
+                      className="w-full h-16 bg-muted/40 border-2 border-transparent rounded-[1.5rem] pl-12 pr-6 font-bold focus:bg-background focus:border-primary/20 transition-all outline-none italic placeholder:not-italic"
+                    />
+                 </div>
+               </div>
+             </div>
+
+             <Button 
+                disabled={isLoading}
+                className="w-full h-16 bg-foreground text-background font-black text-lg rounded-[1.5rem] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-black/5"
+             >
+                {isLoading ? (
+                    <div className="h-6 w-6 border-3 border-background/30 border-t-background rounded-full animate-spin" />
+                ) : (
+                    "Authorize Session"
+                )}
+             </Button>
+          </form>
+
+          <div className="relative pt-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border/60"></span>
+            </div>
+            <div className="relative flex justify-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+              <span className="bg-background px-4">Instant Demo Access</span>
+            </div>
           </div>
 
-          <div className="grid gap-4 pt-2">
-            <Link href="/student/dashboard">
-              <Button className="h-12 w-full rounded-xl bg-foreground text-base font-semibold text-background shadow-md hover:bg-foreground/90 hover:-translate-y-0.5 transition-all">
-                Continue to workspace
-              </Button>
+          <div className="grid grid-cols-2 gap-4">
+             <Link href="/student/dashboard" className="contents">
+               <button className="flex items-center justify-center gap-3 h-14 bg-muted/40 border-2 border-transparent rounded-2xl hover:border-primary/20 hover:bg-muted/60 transition-all group">
+                  <div className="h-2 w-2 rounded-full bg-accent-emerald animate-pulse" />
+                  <span className="text-xs font-bold uppercase tracking-widest text-foreground/80 group-hover:text-primary transition-colors">Student View</span>
+               </button>
+             </Link>
+             <Link href="/admin/dashboard" className="contents">
+               <button className="flex items-center justify-center gap-3 h-14 bg-muted/40 border-2 border-transparent rounded-2xl hover:border-primary/20 hover:bg-muted/60 transition-all group">
+                  <div className="h-2 w-2 rounded-full bg-accent-violet" />
+                  <span className="text-xs font-bold uppercase tracking-widest text-foreground/80 group-hover:text-primary transition-colors">Admin View</span>
+               </button>
+             </Link>
+          </div>
+
+          <div className="pt-10 text-center">
+            <Link href="/" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 hover:text-primary transition-colors">
+              Back to Landing Page
             </Link>
-            <Link href="/">
-              <Button variant="outline" className="h-12 w-full rounded-xl text-base font-semibold border-border/80 hover:bg-muted/50 transition-colors">
-                Back to landing page
-              </Button>
-            </Link>
           </div>
-
-          <div className="rounded-2xl border border-border/60 bg-muted/30 p-4 text-sm font-medium text-muted-foreground text-center">
-            Demo account uses mock database records, weekly pricing logic, and sandbox payout data.
-          </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
 }
 
-// Sub-components modernized
+// Sub-components
 
 function ForecastTile({ icon: Icon, label, value }: { icon: typeof CloudRain; label: string; value: string }) {
   return (
-    <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-sm hover:border-foreground/20 transition-all">
-      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-border/50 bg-muted text-foreground">
-        <Icon className="h-5 w-5" />
+    <div className="rounded-[2rem] border border-border/40 bg-card p-8 flex flex-col items-center text-center hover:border-primary/20 transition-all">
+      <div className="h-16 w-16 flex items-center justify-center rounded-2xl bg-muted/50 text-primary shadow-sm mb-6">
+        <Icon size={28} />
       </div>
-      <p className="mt-5 text-sm font-medium text-muted-foreground">{label}</p>
-      <p className="mt-1 text-2xl font-semibold tracking-tight text-foreground">{value}</p>
+      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">{label}</p>
+      <p className="mt-2 text-3xl font-black tracking-tighter text-foreground">{value}</p>
     </div>
   );
 }
 
 function SettingRow({ icon: Icon, label, value }: { icon: typeof Smartphone; label: string; value: string }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-border/60 bg-muted/20 p-4 hover:bg-muted/40 transition-colors">
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border/50 bg-background text-foreground shadow-sm">
-        <Icon className="h-5 w-5" />
-      </div>
-      <div>
-        <p className="font-semibold text-foreground">{label}</p>
-        <p className="text-sm font-medium text-muted-foreground mt-0.5">{value}</p>
-      </div>
-    </div>
-  );
-}
-
-function InputShell({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="group space-y-2">
-      <label className="text-sm font-semibold text-foreground">{label}</label>
-      <div className="flex h-12 w-full items-center rounded-xl border border-border/80 bg-background px-4 text-foreground shadow-sm group-hover:border-foreground/30 transition-colors">
-        {value}
-      </div>
+    <div className="flex items-center gap-5 p-5 bg-muted/20 rounded-3xl border border-border/40 group hover:bg-muted/40 transition-all cursor-default">
+       <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-card border group-hover:text-primary transition-colors">
+          <Icon size={18} />
+       </div>
+       <div>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{label}</p>
+          <p className="font-bold text-foreground tracking-tight">{value}</p>
+       </div>
     </div>
   );
 }

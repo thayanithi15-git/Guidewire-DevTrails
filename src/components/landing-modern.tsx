@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, CheckCircle, Plus, Minus } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, CheckCircle, Plus, Minus, Zap, ShieldCheck, CloudRain, ThermometerSun, AlertTriangle, RadioTower } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ThemeQuickToggle } from "@/components/gigshield-ui";
+import { ThemeQuickToggle, MetricGrid, SectionCard } from "@/components/gigshield-ui";
 import {
     appIdentity,
     disruptions,
@@ -18,237 +19,308 @@ import {
     trustIndicators,
     workerProfile
 } from "@/data/gigshield-data";
-
-function Badge({ children, active }: { children: React.ReactNode; active?: boolean }) {
-    return (
-        <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${active ? "border-foreground bg-foreground text-background shadow-sm" : "border-border text-muted-foreground bg-muted/30 backdrop-blur-sm"
-            }`}>
-            {children}
-        </span>
-    );
-}
+import { cn } from "@/lib/utils";
 
 export function ModernLandingPageView() {
     const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
 
     return (
-        <div className="min-h-screen bg-background text-foreground font-sans selection:bg-foreground/20 selection:text-foreground flex flex-col">
-            {/* Navigation - Enhanced Blur & Transparency */}
-            <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
-                <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between px-6">
-                    <div className="flex items-center gap-5">
-                        <Link href="/" className="font-semibold tracking-tight text-lg flex items-center gap-2">
-                            {appIdentity.name}
+        <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20 selection:text-primary flex flex-col">
+            {/* Premium Header */}
+            <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/60 backdrop-blur-xl">
+                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+                    <div className="flex items-center gap-8">
+                        <Link href="/" className="font-bold text-2xl tracking-tighter flex items-center gap-2 group px-2">
+                            <span className="text-foreground group-hover:opacity-80 transition-opacity">
+                                {appIdentity.name}
+                            </span>
                         </Link>
-                        <div className="hidden h-4 w-px bg-border sm:block" />
-                        <span className="hidden text-sm font-medium text-muted-foreground sm:block">
-                            Gig Economy Defense
-                        </span>
+                        <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-muted-foreground">
+                            <Link href="#how-it-works" className="hover:text-foreground transition-colors">Mechanism</Link>
+                            <Link href="#disruptions" className="hover:text-foreground transition-colors">Risks</Link>
+                            <Link href="#pricing" className="hover:text-foreground transition-colors">Pricing</Link>
+                        </nav>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                         <ThemeQuickToggle />
-                        <Link href="/auth/access" className="hidden sm:block">
-                            <Button variant="ghost" className="h-8 px-4 text-sm font-medium hover:bg-muted/50 rounded-full">
-                                Log in
-                            </Button>
+                        <Link href="/auth/access">
+                            <Button variant="ghost" className="rounded-full font-bold">Log in</Button>
                         </Link>
                         <Link href="/auth/access">
-                            <Button className="h-8 rounded-full bg-foreground text-background hover:bg-foreground/90 px-5 text-sm font-medium shadow-sm transition-transform hover:scale-105 active:scale-95">
-                                Get started
+                            <Button className="btn-premium bg-gradient-ds-indigo text-white border-0">
+                                Launch Demo
                             </Button>
                         </Link>
                     </div>
                 </div>
             </header>
 
-            <main className="flex-1">
-                {/* Hero Section - Fixed Spacing & Added Gradient Text */}
-                <section className="relative mx-auto max-w-screen-xl overflow-hidden px-6 pt-12 pb-20 md:pt-20 md:pb-32">
-                    {/* Refined Ambient Background Glow */}
-                    <div className="absolute right-0 top-0 -z-10 h-[400px] w-[400px] -translate-y-1/4 translate-x-1/4 rounded-full bg-foreground/5 blur-[100px] md:h-[600px] md:w-[600px]" />
+            <main className="flex-1 overflow-x-hidden">
+                {/* Impactful Hero Section */}
+                <section className="relative container-custom pt-20 pb-32 lg:pt-32 lg:pb-48">
+                    {/* Ambient Gradients - Balanced */}
+                    <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/2 rounded-full bg-accent-violet/5 blur-[120px]" />
+                    <div className="absolute bottom-0 left-0 -z-10 h-[500px] w-[500px] translate-y-1/2 -translate-x-1/2 rounded-full bg-accent-emerald/5 blur-[120px]" />
 
-                    <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
-                        <div className="space-y-8 md:space-y-5 z-10">
-                            {/* <Badge active>Income protection for delivery partners</Badge> */}
+                    <div className="grid gap-16 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+                        <div className="space-y-10 z-10">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6 }}
+                                className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary shadow-sm"
+                            >
+                                <Zap className="h-3 w-3" /> Parametric Income Defense
+                            </motion.div>
 
-                            <div className="space-y-5 md:space-y-6">
-                                <h1 className="bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-4xl font-semibold tracking-tight text-transparent sm:text-5xl md:text-6xl lg:text-[4.5rem] lg:leading-[1.05]">
-                                    Protect earnings from the unexpected.
-                                </h1>
-                                <p className="max-w-xl text-base text-muted-foreground leading-relaxed md:text-lg font-medium">
-                                    Heavy rain, AQI spikes, and zone closures cost delivery partners unrecoverable wages.
-                                    GigShield detects disruptions and restores your lost income instantly.
-                                    <strong className="text-foreground font-semibold"> Pure protection, no paperwork.</strong>
-                                </p>
-                            </div>
+                            <motion.h1
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.1 }}
+                                className="text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem] leading-[1] lg:leading-[0.9]"
+                            >
+                                Predictable <br />
+                                <span className="text-gradient-ds">Earnings.</span> <br />
+                                Automated.
+                            </motion.h1>
 
-                            {/* Buttons */}
-                            <div className="flex flex-col items-center gap-4 sm:flex-row">
-                                <Link href="/auth/access" className="w-full sm:w-auto">
-                                    <Button className="h-12 w-full rounded-full bg-foreground px-8 text-base font-medium text-background shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all sm:w-auto">
-                                        Start Protection Demo
+                            <motion.p
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.2 }}
+                                className="max-w-xl text-lg md:text-xl font-medium text-muted-foreground leading-relaxed italic border-l-4 border-accent-emerald pl-6"
+                            >
+                                "What if insurance didn’t wait for claims, but acted the moment a disruption happens?"
+                            </motion.p>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.3 }}
+                                className="flex flex-col sm:flex-row gap-4 sm:items-center"
+                            >
+                                <Link href="/auth/access">
+                                    <Button className="btn-premium h-14 px-10 text-lg bg-gradient-ds-mixed text-white border-0 shadow-2xl">
+                                        Protect My Income
                                     </Button>
                                 </Link>
-                                <Link href="/student/dashboard" className="w-full sm:w-auto">
-                                    <Button variant="outline" className="h-12 w-full rounded-full border-border px-8 text-base font-medium hover:bg-muted/50 transition-all sm:w-auto">
-                                        Explore Dashboard
+                                <Link href="/student/dashboard">
+                                    <Button variant="outline" className="h-14 px-10 text-lg rounded-full border-2 font-bold hover:bg-muted/40 transition-all">
+                                        Open Dashboard
                                     </Button>
                                 </Link>
-                            </div>
+                            </motion.div>
 
-                            {/* Stats Grid */}
-                            <div className="grid max-w-lg grid-cols-2 gap-6 border-t border-border/60 pt-8 sm:grid-cols-3 md:gap-8">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.4 }}
+                                className="grid grid-cols-2 sm:grid-cols-3 gap-10 pt-12 border-t border-border/40"
+                            >
                                 {heroStats.map((item) => (
-                                    <div key={item.label} className="space-y-1.5">
-                                        <p className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">{item.value}</p>
-                                        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{item.label}</p>
+                                    <div key={item.label} className="space-y-2">
+                                        <p className="text-2xl font-bold tracking-tighter text-foreground">{item.value}</p>
+                                        <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/80">{item.label}</p>
+                                    </div>
+                                ))}
+                            </motion.div>
+                        </div>
+
+                        {/* Floating Glass Profile Card */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                            className="relative perspective-2000"
+                        >
+                            <div className="absolute -inset-10 bg-gradient-ds-mixed opacity-10 blur-[100px] rounded-full animate-pulse" />
+                            <div className="glass-card relative overflow-hidden rounded-[2.5rem] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.2)]">
+                                <div className="bg-gradient-ds-indigo p-8 text-white">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/20">
+                                            <span className="relative flex h-2 w-2">
+                                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+                                                <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+                                            </span>
+                                            <span className="text-[10px] font-bold uppercase tracking-wider">Coverage Active</span>
+                                        </div>
+                                        <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-white/10 border border-white/20 backdrop-blur-sm">
+                                            <Zap className="h-5 w-5" />
+                                        </div>
+                                    </div>
+                                    <h3 className="text-2xl font-bold tracking-tight">{workerProfile.name}</h3>
+                                    <p className="text-white/60 font-mono text-sm mt-1 uppercase tracking-widest">{workerProfile.policyId}</p>
+                                </div>
+                                <div className="p-8 space-y-6">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Zone Risk</span>
+                                        <span className="text-lg font-bold text-primary">{workerProfile.zone}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between border-t border-border/40 pt-6">
+                                        <span className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Active Risks</span>
+                                        <div className="flex gap-2">
+                                            <CloudRain className="h-5 w-5 text-accent-violet" />
+                                            <ThermometerSun className="h-5 w-5 text-accent-emerald" />
+                                        </div>
+                                    </div>
+                                    <div className="bg-muted/30 rounded-2xl p-6 space-y-3">
+                                        <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-muted-foreground/60">
+                                            <span>Protection Stream</span>
+                                            <span className="text-accent-emerald">Synced</span>
+                                        </div>
+                                        <div className="h-1.5 w-full bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
+                                            <motion.div
+                                                animate={{ x: ["-100%", "100%"] }}
+                                                transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                                                className="h-full w-1/3 bg-gradient-to-r from-transparent via-primary to-transparent"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </section>
+
+                {/* Inspiration Narrative Section */}
+                <section id="inspiration" className="bg-muted/10 py-32 md:py-48 border-y border-border/40">
+                    <div className="container-custom">
+                        <div className="max-w-4xl mx-auto text-center space-y-8">
+                            <motion.h2
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                className="text-4xl md:text-5xl font-bold tracking-tight"
+                            >
+                                Why <span className="text-gradient-ds">Devspirits?</span>
+                            </motion.h2>
+                            <p className="text-lg md:text-2xl text-muted-foreground leading-relaxed font-medium italic">
+                                India’s gig economy powers our cities, but during heavy rainfall, extreme heat, or curfews, income drops to zero instantly.
+                                We built Devspirits to bridge the gap between real-world risk and financial protection.
+                            </p>
+                            <div className="grid sm:grid-cols-3 gap-8 pt-16">
+                                <div className="space-y-4">
+                                    <div className="h-14 w-14 mx-auto flex items-center justify-center rounded-2xl bg-accent-violet/10 text-accent-violet border border-accent-violet/20">
+                                        <CloudRain size={28} />
+                                    </div>
+                                    <h4 className="font-bold text-xl uppercase tracking-tighter">Monsoon Halts</h4>
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="h-14 w-14 mx-auto flex items-center justify-center rounded-2xl bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/20">
+                                        <ThermometerSun size={28} />
+                                    </div>
+                                    <h4 className="font-bold text-xl uppercase tracking-tighter">Heat Waves</h4>
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="h-14 w-14 mx-auto flex items-center justify-center rounded-2xl bg-primary/10 text-primary border border-primary/20">
+                                        <AlertTriangle size={28} />
+                                    </div>
+                                    <h4 className="font-bold text-xl uppercase tracking-tighter">Zone Closures</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Parametric Disruptions Grid */}
+                <section id="disruptions" className="section-padding">
+                    <div className="container-custom">
+                        <div className="mb-20 space-y-4 px-4 md:px-0">
+                            <h2 className="text-3xl md:text-5xl font-bold tracking-tight uppercase italic pointer-events-none">The Zero-Click <br /><span className="text-gradient-ds">Trigger List.</span></h2>
+                            <p className="max-w-2xl text-lg font-medium text-muted-foreground">
+                                No manual claims. No proofs. If these parameters cross the threshold, your payout is initiated immediately.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {[
+                                { title: "Heavy Rain", icon: CloudRain, threshold: "> 20mm/hr", color: "text-primary" },
+                                { title: "AQI Spike", icon: RadioTower, threshold: "> 300 AQI", color: "text-accent-violet" },
+                                { title: "Extreme Heat", icon: ThermometerSun, threshold: "> 42°C", color: "text-amber-500" },
+                                { title: "App Crash", icon: Zap, threshold: "System Outage", color: "text-accent-emerald" },
+                            ].map((risk) => (
+                                <div key={risk.title} className="glass-card p-10 hover:border-primary/20 transition-all group rounded-[2rem]">
+                                    <risk.icon className={cn("h-10 w-10 mb-8 transition-transform group-hover:scale-110", risk.color)} />
+                                    <h3 className="font-bold text-2xl tracking-tighter mb-2">{risk.title}</h3>
+                                    <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-6 font-sans">Parametric Threshold</div>
+                                    <div className="text-lg font-bold text-foreground bg-muted/40 px-4 py-2 rounded-xl inline-block">
+                                        {risk.threshold}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                {/* The Mechanism Section (Sticky Layout) */}
+                <section id="how-it-works" className="bg-primary/5 py-32 border-y border-border/40">
+                    <div className="container-custom">
+                        <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-20 items-start">
+                            <div className="lg:sticky lg:top-32 space-y-8">
+                                <h2 className="text-4xl md:text-6xl font-bold tracking-tight leading-[0.95]">How <br /><span className="text-gradient-ds">it Works.</span></h2>
+                                <p className="text-lg font-medium text-muted-foreground leading-relaxed">
+                                    A completely automated lifecycle that removes human bias and delays.
+                                </p>
+                                <Link href="/auth/access">
+                                    <Button className="btn-premium bg-foreground text-background">See Detailed Flows</Button>
+                                </Link>
+                            </div>
+
+                            <div className="space-y-6">
+                                {landingJourney.map((step, i) => (
+                                    <div key={step.step} className="glass-card p-8 md:p-10 flex gap-8 group hover:bg-muted/20 transition-all">
+                                        <div className="h-12 w-12 shrink-0 rounded-2xl bg-primary text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
+                                            {i + 1}
+                                        </div>
+                                        <div className="space-y-2">
+                                            <h3 className="text-2xl font-bold tracking-tight">{step.title}</h3>
+                                            <p className="text-muted-foreground font-medium leading-relaxed">{step.description}</p>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
-
-                        {/* Floating Live Profile Component */}
-                        <div className="perspective-1000 relative mx-auto mt-8 w-full max-w-md lg:mt-0 lg:ml-auto">
-                            <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-tr from-foreground/10 to-transparent blur-2xl" />
-                            <div className="relative overflow-hidden rounded-3xl border border-border/80 bg-card/80 shadow-2xl backdrop-blur-xl transition-transform duration-500 hover:scale-[1.02]">
-                                <div className="flex items-start justify-between border-b border-border/50 bg-muted/30 p-6">
-                                    <div>
-                                        <div className="mb-3 flex items-center gap-2">
-                                            <span className="relative flex h-2.5 w-2.5">
-                                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
-                                                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500"></span>
-                                            </span>
-                                            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Live Coverage</span>
-                                        </div>
-                                        <h3 className="text-xl font-semibold tracking-tight">{workerProfile.name}</h3>
-                                        <p className="mt-1 font-mono text-sm text-muted-foreground">ID: {workerProfile.policyId}</p>
-                                    </div>
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border/50 bg-background shadow-sm">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-foreground"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-5 p-6">
-                                    <div className="flex items-center justify-between text-sm">
-                                        <span className="text-muted-foreground font-medium">Zone Profile</span>
-                                        <span className="rounded-lg bg-muted px-3 py-1 font-semibold">{workerProfile.zone}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between text-sm">
-                                        <span className="text-muted-foreground font-medium">Weekly Premium</span>
-                                        <span className="font-semibold text-foreground">{policySummary.weeklyPremium}</span>
-                                    </div>
-                                </div>
-
-                                <div className="bg-foreground p-6 text-background">
-                                    <p className="mb-4 text-xs font-bold uppercase tracking-wider text-background/50">Active Telemetry</p>
-                                    <div className="space-y-4">
-                                        {riskSignals.slice(0, 3).map((signal) => {
-                                            const Icon = signal.icon;
-                                            return (
-                                                <div key={signal.label} className="flex items-center gap-3">
-                                                    <div className="rounded-lg bg-background/10 p-2">
-                                                        <Icon className="h-4 w-4 text-background/90" />
-                                                    </div>
-                                                    <p className="flex-1 text-sm font-semibold">{signal.label}</p>
-                                                    <p className="font-mono text-sm text-background/70">{signal.value}</p>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </section>
 
-                {/* Dynamic Bento Grid: Core Disruptions */}
-                <section className="py-24 border-y border-border/50 bg-gradient-to-b from-muted/10 to-transparent">
-                    <div className="mx-auto max-w-screen-xl px-6">
-                        <div className="mb-16 max-w-2xl">
-                            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl mb-4">Built around external risk.</h2>
-                            <p className="text-lg text-muted-foreground leading-relaxed">
-                                We insure pure external disruptions. No medical, no vehicle. If the system stops you from working, your earnings are restored.
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {disruptions.map((item, i) => {
-                                const Icon = item.icon;
-                                const isFeatured = i === 0;
-
-                                return (
-                                    <div
-                                        key={item.title}
-                                        className={`group relative overflow-hidden rounded-[2rem] border border-border/60 bg-card p-8 md:p-10 hover:border-foreground/20 hover:shadow-lg transition-all duration-300 ${isFeatured ? 'md:col-span-2 lg:col-span-2 bg-gradient-to-br from-card to-muted/30' : ''
-                                            }`}
-                                    >
-                                        <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-muted border border-border/50 shadow-sm group-hover:scale-110 transition-transform duration-300">
-                                            <Icon className="h-6 w-6 text-foreground" />
+                {/* FAQ Section */}
+                <section className="section-padding bg-background">
+                    <div className="container-custom">
+                        <div className="grid lg:grid-cols-[1fr_1.5fr] gap-20">
+                            <div className="space-y-12">
+                                <h2 className="text-3xl md:text-5xl font-bold tracking-tight uppercase italic">FAQs & <br /><span className="text-gradient-ds">Trust.</span></h2>
+                                <div className="grid grid-cols-2 gap-10">
+                                    {trustIndicators.map((metric) => (
+                                        <div key={metric.metric} className="space-y-2">
+                                            <p className="text-4xl font-bold tracking-tighter text-foreground">{metric.value}</p>
+                                            <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/80 leading-tight">{metric.metric}</p>
                                         </div>
-                                        <h3 className="font-semibold text-2xl mb-3 tracking-tight">{item.title}</h3>
-                                        <p className={`text-muted-foreground mb-8 leading-relaxed ${isFeatured ? 'max-w-xl text-lg' : 'text-base'}`}>
-                                            {item.description}
-                                        </p>
-
-                                        <ul className="space-y-3 pt-6 border-t border-border/50">
-                                            {item.examples.map((ex) => (
-                                                <li key={ex} className="flex items-center gap-3 text-sm font-medium text-foreground/80">
-                                                    <CheckCircle className="h-4 w-4 text-muted-foreground shrink-0" />
-                                                    <span>{ex}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </section>
-
-                {/* Feature Highlights - Minimal Grid */}
-                <section className="py-24">
-                    <div className="mx-auto max-w-screen-xl px-6">
-                        <div className="grid md:grid-cols-3 gap-12 md:gap-8">
-                            {landingHighlights.slice(0, 3).map((item) => {
-                                const Icon = item.icon;
-                                return (
-                                    <div key={item.title} className="space-y-4">
-                                        <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-muted/50 border border-border/50">
-                                            <Icon className="h-5 w-5 text-foreground" />
-                                        </div>
-                                        <h3 className="font-semibold text-xl tracking-tight">{item.title}</h3>
-                                        <p className="text-base text-muted-foreground leading-relaxed">{item.description}</p>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </section>
-
-                {/* Sticky Layout: The Mechanism */}
-                <section className="py-24 border-t border-border/50 bg-background">
-                    <div className="mx-auto max-w-screen-xl px-6">
-                        <div className="grid lg:grid-cols-[1fr_1.5fr] gap-16 items-start">
-                            <div className="lg:sticky lg:top-32">
-                                <Badge>Automated Lifecycle</Badge>
-                                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl mt-6 mb-4">The mechanism.</h2>
-                                <p className="text-lg text-muted-foreground leading-relaxed">
-                                    A transparent, completely automated lifecycle designed to intercept financial loss the moment an event occurs. Zero manual claims required.
-                                </p>
+                                    ))}
+                                </div>
                             </div>
 
                             <div className="space-y-4">
-                                {landingJourney.map((step, i) => (
-                                    <div key={step.step} className="group flex gap-6 p-6 rounded-[2rem] border border-border/60 bg-card hover:bg-muted/30 hover:border-border transition-all duration-300">
-                                        <div className="flex-shrink-0 mt-1">
-                                            <div className="h-10 w-10 rounded-full bg-muted border border-border/50 text-foreground flex items-center justify-center font-mono text-sm font-semibold group-hover:bg-foreground group-hover:text-background transition-colors">
-                                                0{i + 1}
+                                {landingFaq.slice(0, 5).map((faq, index) => (
+                                    <div
+                                        key={index}
+                                        className={cn(
+                                            "rounded-[2rem] border transition-all duration-300",
+                                            expandedFaq === faq.q ? "glass-card p-2" : "border-transparent bg-muted/20 hover:bg-muted/40"
+                                        )}
+                                    >
+                                        <button
+                                            onClick={() => setExpandedFaq(expandedFaq === faq.q ? null : faq.q)}
+                                            className="w-full flex items-center justify-between p-8 text-left group"
+                                        >
+                                            <span className="font-bold text-xl pr-6">{faq.q}</span>
+                                            <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-full bg-muted group-hover:bg-primary group-hover:text-white transition-all">
+                                                {expandedFaq === faq.q ? <Minus size={20} /> : <Plus size={20} />}
                                             </div>
-                                        </div>
-                                        <div>
-                                            <h3 className="font-semibold text-xl mb-2">{step.title}</h3>
-                                            <p className="text-muted-foreground leading-relaxed">{step.description}</p>
-                                        </div>
+                                        </button>
+                                        {expandedFaq === faq.q && (
+                                            <div className="px-8 pb-8 text-lg font-medium text-muted-foreground leading-relaxed animate-in slide-in-from-top-2 duration-300">
+                                                {faq.a}
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -256,141 +328,45 @@ export function ModernLandingPageView() {
                     </div>
                 </section>
 
-                {/* Pricing - Floating Cards */}
-                <section className="py-32 border-t border-border/50 bg-muted/10 relative overflow-hidden">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-foreground/5 rounded-[100%] blur-[120px] pointer-events-none" />
-                    <div className="mx-auto max-w-screen-xl px-6 relative z-10">
-                        <div className="text-center max-w-2xl mx-auto mb-20">
-                            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl mb-4">Structured on weekly predictability.</h2>
-                            <p className="text-lg text-muted-foreground leading-relaxed">
-                                Premiums dynamically adapt every Sunday. Matched exactly to the gig economy earnings cycle to ease cash flow stress.
-                            </p>
-                        </div>
-
-                        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                            {pricingTiers.map((tier) => (
-                                <div
-                                    key={tier.name}
-                                    className={`relative flex flex-col rounded-[2rem] border p-8 transition-all duration-300 ${tier.highlighted
-                                        ? 'border-foreground/30 bg-card shadow-2xl md:-translate-y-4 z-10 ring-1 ring-foreground/5'
-                                        : 'border-border/60 bg-card/50 hover:bg-card hover:border-border'
-                                        }`}
-                                >
-                                    {tier.highlighted && (
-                                        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-1 rounded-full text-xs font-bold tracking-wide uppercase shadow-sm">
-                                            Recommended
-                                        </div>
-                                    )}
-                                    <div className="mb-6">
-                                        <h3 className="font-semibold text-xl mb-2">{tier.name}</h3>
-                                        <p className="text-sm text-muted-foreground min-h-[40px] leading-relaxed">{tier.description}</p>
-                                    </div>
-
-                                    <div className="mb-8 pb-8 border-b border-border/60">
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-5xl font-semibold tracking-tight">{tier.startingPrice}</span>
-                                            <span className="text-muted-foreground font-medium">/ wk</span>
-                                        </div>
-                                    </div>
-
-                                    <ul className="space-y-4 mb-8 flex-1">
-                                        {tier.features.map((feature) => (
-                                            <li key={feature} className="flex items-start gap-3 text-sm font-medium text-foreground/80">
-                                                <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-                                                <span className="leading-snug">{feature}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    <Button
-                                        className={`w-full h-12 rounded-xl text-base font-semibold transition-all ${tier.highlighted ? 'bg-foreground text-background hover:shadow-md hover:-translate-y-0.5' : 'bg-muted text-foreground hover:bg-muted/80'}`}
-                                    >
-                                        Select Tier
-                                    </Button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* FAQ - Split Layout */}
-                <section className="py-24 border-t border-border/50">
-                    <div className="mx-auto max-w-screen-xl px-6 grid lg:grid-cols-[1fr_1.5fr] gap-16">
-                        <div className="lg:sticky lg:top-32 h-fit space-y-12">
-                            <div>
-                                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl mb-4">Clear, transparent logic.</h2>
-                                <p className="text-lg text-muted-foreground leading-relaxed">No hidden clauses, no claims teams. The parameters command the contract.</p>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-8 pt-8 border-t border-border/50">
-                                {trustIndicators.map((metric) => (
-                                    <div key={metric.metric} className="space-y-1.5">
-                                        <p className="text-4xl font-semibold tracking-tight">{metric.value}</p>
-                                        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">{metric.metric}</p>
-                                        <p className="text-sm text-muted-foreground">{metric.subtext}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="space-y-3">
-                            {landingFaq.map((faq, index) => (
-                                <div
-                                    key={index}
-                                    className={`rounded-2xl border transition-all duration-200 ${expandedFaq === faq.q ? 'border-border bg-muted/30 shadow-sm' : 'border-transparent hover:border-border/50 hover:bg-muted/10'}`}
-                                >
-                                    <button
-                                        onClick={() => setExpandedFaq(expandedFaq === faq.q ? null : faq.q)}
-                                        className="w-full flex items-center justify-between p-6 text-left group"
-                                    >
-                                        <span className="font-medium text-lg pr-4">{faq.q}</span>
-                                        <span className={`flex-shrink-0 rounded-full p-2 transition-colors ${expandedFaq === faq.q ? 'bg-background shadow-sm border border-border' : 'bg-muted group-hover:bg-border/50'}`}>
-                                            {expandedFaq === faq.q ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-                                        </span>
-                                    </button>
-                                    {expandedFaq === faq.q && (
-                                        <div className="px-6 pb-6 text-base text-muted-foreground leading-relaxed animate-in slide-in-from-top-2 fade-in duration-200">
-                                            {faq.a}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* Cinematic Ending CTA */}
-                <section className="py-32 md:py-48 relative overflow-hidden">
-                    <div className="absolute inset-0  text-background" />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-background/10 rounded-full blur-[100px] pointer-events-none" />
-
-                    <div className="relative mx-auto max-w-screen-md px-6 text-center z-10">
-                        <h2 className="text-4xl md:text-6xl font-semibold tracking-tight mb-6">Build your safety net today.</h2>
-                        <p className=" mb-10 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                {/* Final Closing CTA */}
+                <section className="relative py-32 md:py-48 overflow-hidden bg-primary/5">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent-violet/5 rounded-full blur-[120px] pointer-events-none" />
+                    <div className="container-custom text-center relative z-10 space-y-12">
+                        <motion.h2
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            className="text-5xl md:text-[6rem] font-bold tracking-tight leading-[0.9]"
+                        >
+                            Build your <br /><span className="text-gradient-ds">safety net</span> <br />today.
+                        </motion.h2>
+                        <p className="max-w-2xl mx-auto text-xl md:text-2xl font-medium text-muted-foreground leading-relaxed italic">
                             Integrate directly with your live zone parameters and establish a pure parametric guard against unpredicted income loss.
                         </p>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                             <Link href="/auth/access">
-                                <Button className="h-14 rounded-full bg-background text-foreground hover:bg-background/90 px-10 text-lg font-semibold shadow-xl hover:scale-105 transition-transform">
+                                <Button className="btn-premium h-16 px-12 text-xl bg-foreground text-background hover:scale-105 shadow-2xl transition-transform">
                                     Enter Platform
                                 </Button>
                             </Link>
-                            <p className="text-sm font-medium text-muted-foreground sm:ml-4">Takes less than 2 minutes.</p>
+                            <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground/80">Takes less than 2 minutes.</p>
                         </div>
                     </div>
                 </section>
             </main>
 
-            <footer className="border-t border-border bg-background py-10">
-                <div className="mx-auto flex max-w-screen-xl flex-col md:flex-row items-center justify-between px-6 gap-6">
-                    <div className="flex items-center gap-2">
-                        <span className="font-semibold text-lg tracking-tight">{appIdentity.name}</span>
-                        <span className="text-muted-foreground text-sm font-medium">© 2026</span>
+            <footer className="border-t border-border/40 bg-background py-16">
+                <div className="container-custom flex flex-col md:flex-row items-center justify-between gap-12">
+                    <div className="space-y-4 text-center md:text-left">
+                        <span className="font-bold text-3xl tracking-tighter text-gradient-ds">{appIdentity.name}</span>
+                        <p className="text-sm font-bold text-muted-foreground/60 flex items-center justify-center md:justify-start gap-2">
+                            Guidewire DEVTrails 2026 • © 2026 Devspirits. All rights reserved.
+                        </p>
                     </div>
-                    <div className="flex gap-8 text-sm font-medium text-muted-foreground">
-                        <Link href="#" className="hover:text-foreground transition-colors">Platform</Link>
-                        <Link href="#" className="hover:text-foreground transition-colors">Privacy</Link>
-                        <Link href="#" className="hover:text-foreground transition-colors">Terms</Link>
+                    <div className="flex flex-wrap justify-center gap-10 text-sm font-bold uppercase tracking-widest text-muted-foreground">
+                        <Link href="#" className="hover:text-primary transition-colors">Platform</Link>
+                        <Link href="#" className="hover:text-primary transition-colors">Risk Engine</Link>
+                        <Link href="#" className="hover:text-primary transition-colors">Privacy</Link>
+                        <Link href="#" className="hover:text-primary transition-colors">Terms</Link>
                     </div>
                 </div>
             </footer>

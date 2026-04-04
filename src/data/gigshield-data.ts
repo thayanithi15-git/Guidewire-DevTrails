@@ -77,15 +77,15 @@ export type ZoneRisk = {
 };
 
 export const appIdentity = {
-  name: "GigShield AI",
-  tagline: "Weekly income protection for food delivery partners",
+  name: "Devspirits",
+  tagline: "AI-Powered Parametric Income Protection",
   team: "Guidewire DEVTrails 2026",
-  persona: "Zomato / Swiggy food delivery partners",
+  persona: "Gig economy delivery partners (Swiggy, Zomato, etc.)",
 };
 
 export const workerProfile = {
   name: "Raju Kumar",
-  role: "Food Delivery Partner",
+  role: "Delivery Professional",
   platform: "Swiggy + Zomato",
   city: "Bengaluru",
   zone: "HSR Layout",
@@ -95,9 +95,14 @@ export const workerProfile = {
   avgDailyEarnings: "₹820",
   weeklyEarnings: "₹5,740",
   upiId: "raju@upi",
-  policyId: "GSAI-WK-2048",
+  policyId: "DS-WK-2048",
   memberSince: "Jan 2026",
   trustScore: "96/100",
+  platformLinked: {
+    swiggy: true,
+    zomato: false,
+    zepto: false,
+  }
 };
 
 export const dashboardMetrics: MetricCard[] = [

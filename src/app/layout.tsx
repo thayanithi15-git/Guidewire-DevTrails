@@ -7,8 +7,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "GigShield AI",
-  description: "AI-powered weekly income protection platform for food delivery partners.",
+  title: "Devspirits | AI-Powered Parametric Income Protection",
+  description: "Devspirits is a premium parametric insurance platform for India's gig economy, protecting delivery partners from unrecoverable income loss.",
   icons: {
     icon: "/progress_iq.png",
     shortcut: "/progress_iq.png",
