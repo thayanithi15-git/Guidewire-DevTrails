@@ -907,10 +907,16 @@ export function FraudMonitorPageView() {
     >
       <div className="grid gap-8 xl:grid-cols-[1.5fr_1fr]">
         <SectionCard title="Anomaly Risk Assessment" description="Current fraud signals detected across active policies.">
-          <AlertList items={fraudAlerts} />
+          <AlertList items={fraudAlerts.map(a => `${a.issue} detected for ${a.user} in ${a.zone} (Confidence: ${a.confidence})`)} />
         </SectionCard>
         <SectionCard title="Attempted Violations" description="Historical trends in spoofing or false claims.">
-           <EarningsAreaChart data={fraudTrend} />
+           <ComparisonBarChart 
+             data={fraudTrend} 
+             bars={[
+               { key: "normal", color: "var(--color-muted)", name: "Normal Scans" },
+               { key: "anomalies", color: "var(--color-danger)", name: "Anomalies" }
+             ]} 
+           />
         </SectionCard>
       </div>
     </PageShell>
