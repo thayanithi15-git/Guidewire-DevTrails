@@ -768,7 +768,7 @@ export function SignInPageView() {
                 <motion.h1 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-6xl font-black text-white leading-[0.95] tracking-tighter"
+                    className="text-6xl font-bold text-white leading-[0.95] tracking-tighter"
                 >
                     Guardian <br /><span className="text-primary italic">of the</span> Gig.
                 </motion.h1>
@@ -789,12 +789,12 @@ export function SignInPageView() {
                 className="grid grid-cols-2 gap-8 pt-12 border-t border-white/10"
             >
                <div className="space-y-1">
-                  <p className="text-3xl font-black text-white tracking-tighter">4.8s</p>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">Avg Payout Speed</p>
+                  <p className="text-3xl font-bold text-white tracking-tighter">4.8s</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-white/40">Avg Payout Speed</p>
                </div>
                <div className="space-y-1">
-                  <p className="text-3xl font-black text-white tracking-tighter">10K+</p>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">Active Guards</p>
+                  <p className="text-3xl font-bold text-white tracking-tighter">10K+</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-white/40">Active Guards</p>
                </div>
             </motion.div>
         </div>
@@ -810,14 +810,14 @@ export function SignInPageView() {
             className="w-full max-w-md space-y-10 z-10"
         >
           <div className="space-y-3">
-             <h2 className="text-4xl font-black tracking-tight text-foreground">Welcome Back.</h2>
+             <h2 className="text-4xl font-bold tracking-tight text-foreground">Welcome Back.</h2>
              <p className="text-muted-foreground font-medium italic">Secure your income in seconds.</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
              <div className="space-y-4">
                <div className="space-y-2 group">
-                 <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground transition-colors group-focus-within:text-primary pl-1">
+                 <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground transition-colors group-focus-within:text-primary pl-1">
                    Phone or Email
                  </label>
                  <div className="relative">
@@ -827,7 +827,7 @@ export function SignInPageView() {
                       placeholder="e.g. +91 9988776655"
                       required
                       suppressHydrationWarning
-                      className="w-full h-16 bg-muted/40 border-2 border-transparent rounded-[1.5rem] pl-12 pr-6 font-bold focus:bg-background focus:border-primary/20 transition-all outline-none"
+                      className="w-full h-16 bg-muted/40 border-2 border-transparent rounded-2xl pl-12 pr-6 font-semibold focus:bg-background focus:border-primary/20 transition-all outline-none"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
@@ -844,7 +844,7 @@ export function SignInPageView() {
                       type="password" 
                       placeholder="Demo PIN (any)"
                       suppressHydrationWarning
-                      className="w-full h-16 bg-muted/40 border-2 border-transparent rounded-[1.5rem] pl-12 pr-6 font-bold focus:bg-background focus:border-primary/20 transition-all outline-none italic placeholder:not-italic"
+                      className="w-full h-16 bg-muted/40 border-2 border-transparent rounded-2xl pl-12 pr-6 font-semibold focus:bg-background focus:border-primary/20 transition-all outline-none italic placeholder:not-italic"
                     />
                  </div>
                </div>
@@ -852,7 +852,7 @@ export function SignInPageView() {
 
              <Button 
                 disabled={isLoading}
-                className="w-full h-16 bg-foreground text-background font-black text-lg rounded-[1.5rem] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-black/5"
+                className="w-full h-16 bg-foreground text-background font-bold text-lg rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-black/5"
              >
                 {isLoading ? (
                     <div className="h-6 w-6 border-3 border-background/30 border-t-background rounded-full animate-spin" />
@@ -866,7 +866,7 @@ export function SignInPageView() {
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-border/60"></span>
             </div>
-            <div className="relative flex justify-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+            <div className="relative flex justify-center text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
               <span className="bg-background px-4">Instant Demo Access</span>
             </div>
           </div>
@@ -875,19 +875,19 @@ export function SignInPageView() {
              <Link href="/student/dashboard" className="contents">
                <button className="flex items-center justify-center gap-3 h-14 bg-muted/40 border-2 border-transparent rounded-2xl hover:border-primary/20 hover:bg-muted/60 transition-all group">
                   <div className="h-2 w-2 rounded-full bg-accent-emerald animate-pulse" />
-                  <span className="text-xs font-bold uppercase tracking-widest text-foreground/80 group-hover:text-primary transition-colors">Student View</span>
+                  <span className="text-xs font-semibold uppercase tracking-widest text-foreground/80 group-hover:text-primary transition-colors">Student View</span>
                </button>
              </Link>
              <Link href="/admin/dashboard" className="contents">
                <button className="flex items-center justify-center gap-3 h-14 bg-muted/40 border-2 border-transparent rounded-2xl hover:border-primary/20 hover:bg-muted/60 transition-all group">
                   <div className="h-2 w-2 rounded-full bg-accent-violet" />
-                  <span className="text-xs font-bold uppercase tracking-widest text-foreground/80 group-hover:text-primary transition-colors">Admin View</span>
+                  <span className="text-xs font-semibold uppercase tracking-widest text-foreground/80 group-hover:text-primary transition-colors">Admin View</span>
                </button>
              </Link>
           </div>
 
           <div className="pt-10 text-center">
-            <Link href="/" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 hover:text-primary transition-colors">
+            <Link href="/" className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/60 hover:text-primary transition-colors">
               Back to Landing Page
             </Link>
           </div>
@@ -901,25 +901,25 @@ export function SignInPageView() {
 
 function ForecastTile({ icon: Icon, label, value }: { icon: typeof CloudRain; label: string; value: string }) {
   return (
-    <div className="rounded-[2rem] border border-border/40 bg-card p-8 flex flex-col items-center text-center hover:border-primary/20 transition-all">
-      <div className="h-16 w-16 flex items-center justify-center rounded-2xl bg-muted/50 text-primary shadow-sm mb-6">
+    <div className="rounded-[2.5rem] border border-border/40 bg-card p-10 flex flex-col items-center text-center hover:border-primary/20 transition-all shadow-sm">
+      <div className="h-16 w-16 flex items-center justify-center rounded-2xl bg-muted/50 text-primary shadow-sm mb-8">
         <Icon size={28} />
       </div>
-      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">{label}</p>
-      <p className="mt-2 text-3xl font-black tracking-tighter text-foreground">{value}</p>
+      <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/80">{label}</p>
+      <p className="mt-3 text-3xl font-bold tracking-tighter text-foreground">{value}</p>
     </div>
   );
 }
 
 function SettingRow({ icon: Icon, label, value }: { icon: typeof Smartphone; label: string; value: string }) {
   return (
-    <div className="flex items-center gap-5 p-5 bg-muted/20 rounded-3xl border border-border/40 group hover:bg-muted/40 transition-all cursor-default">
+    <div className="flex items-center gap-5 p-6 bg-muted/20 rounded-[2rem] border border-border/40 group hover:bg-muted/40 transition-all cursor-default">
        <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-card border group-hover:text-primary transition-colors">
           <Icon size={18} />
        </div>
        <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{label}</p>
-          <p className="font-bold text-foreground tracking-tight">{value}</p>
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">{label}</p>
+          <p className="font-semibold text-foreground tracking-tight">{value}</p>
        </div>
     </div>
   );
